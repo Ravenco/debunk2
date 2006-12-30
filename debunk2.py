@@ -24,20 +24,16 @@ VCARD=5  # vcard spec
 SYNCML=6  # syncml
 ODT=7  # OpenSpreadsheet 
 
-#gui = uic.loadUi('debunk2.ui')
-
 class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
     
     nk2 = None
     pathlist = []
     
-    def __init__(self):#,parent = None,name = None,modal = 0,fl = 0):
+    def __init__(self):
         QtGui.QDialog.__init__(self)
-        #debunk2_ui.Ui_debunk2.__init__(self)#, parent, name, fl)
         self.ui = debunk2_ui.Ui_debunk2()
         self.ui.setupUi(self)
         
-        #self.setupUi(debunk2_ui.Ui_debunk2)
         QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('highlighted(int)'), self.loadNK2)
 
         here = os.getenv('PWD')
@@ -60,9 +56,8 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
     def displayPaths(self, pathlist):
         "Displays different paths so the user can choose"
         self.ui.nk2Location.clear()
-        #for z in pathlist: 
-            #self.ui.nk2Location.insertItem(z)
         self.ui.nk2Location.insertItems(0, pathlist)
+    
     
     def loadNK2(self, item=0):
         "Load an NK2 and display it"
@@ -77,8 +72,6 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
         for rec in self.nk2.records:
             self.ui.parsedTable.setItem(i, 0, QtGui.QTableWidgetItem(rec.name))
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
-            #self.ui.parsedTable.setText(i, 0, rec.name)
-            #self.ui.parsedTable.setText(i, 1, rec.address)
             i += 1
         #self.nk2.check()
     
@@ -101,19 +94,11 @@ if __name__ == "__main__":
 
     if "-h" in sys.argv[1:]:
         print __doc__
-        print "Bruk %s -i for å lage kommandolinjefaktura" % sys.argv[0]
+        print 'Usage: %s [NK2 file] '% sys.argv[0]
         sys.exit()
-    elif False:
-        a = QtGui.QApplication(sys.argv)
-        #QtCore.QObject.connect(a,QtCore.SIGNAL('lastWindowClosed()'),a,QtCore.SLOT('quit()'))
-        ui = debunker()
-        d.show()
-        #a.exec_loop()
-        sys.exit(app.exec_())
     else:
         app = QtGui.QApplication(sys.argv)
         debunk2 = QtGui.QDialog()
         ui = debunker()
-        #ui.setupUi(debunk2)
         ui.show()
         sys.exit(app.exec_())
