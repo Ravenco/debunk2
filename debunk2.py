@@ -34,7 +34,8 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
         self.ui = debunk2_ui.Ui_debunk2()
         self.ui.setupUi(self)
         
-        QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('highlighted(int)'), self.loadNK2)
+        #QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('highlighted(int)'), self.loadNK2)
+        QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('currentIndexChanged(int)'), self.loadNK2)
 
         here = os.getenv('PWD')
         if here is not None:
@@ -67,13 +68,17 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
         #del(self.nk2)
         self.nk2 = nk2parser.nk2bib(path)  # init the parser
         self.nk2.parse()                   # slurp the file
+        #self.nk2.check()
+        self.ui.parsedTable.clear() # zap the existing contents 
+        self.ui.parsedTable.setHorizontalHeaderItem(0, QtGui.QTableWidgetItem('Name'))
+        self.ui.parsedTable.setHorizontalHeaderItem(1, QtGui.QTableWidgetItem('Address'))
         self.ui.parsedTable.setRowCount(len(self.nk2.records) + 1) # expand table to keep all records
         i  = 0
         for rec in self.nk2.records:
             self.ui.parsedTable.setItem(i, 0, QtGui.QTableWidgetItem(rec.name))
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
             i += 1
-        #self.nk2.check()
+        self.ui.parsedTable.resizeColumnsToContents()
     
     def saveTable(self, format=SSV):
         if format in (CSV, TSV, SSV):
