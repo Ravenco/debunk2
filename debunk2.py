@@ -6,7 +6,7 @@
 #
 #    Lisence: GPL2
 #
-# $Id: faktura.py 105 2006-12-24 01:00:17Z havard.dahle $
+# $Id$
 ###########################################################################
 
 __doc__ = """Export MS Outlook NK2 files into something readable by humans and machines (qt gui)
