@@ -40,7 +40,6 @@ class debunker(QtGui.QDialog):
         self.ui = debunk2_ui.Ui_debunk2()
         self.ui.setupUi(self)
         
-        QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('currentIndexChanged(int)'), self.loadNK2)
         QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('editTextChanged(QString)'), self.loadNK2)
         QtCore.QObject.connect(self, QtCore.SIGNAL('pathlistChanged'), self.loadNK2)
         
@@ -53,8 +52,6 @@ class debunker(QtGui.QDialog):
             self.pathlist.append(here)
         
         self.displayPaths(self.findNK2())
-        
-        self.loadNK2()
         
     def findNK2(self):
         "Look in the default places for an NK2 file. Returns list of found files"
