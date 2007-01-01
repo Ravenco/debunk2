@@ -37,31 +37,6 @@ class nk2bib:
         self.filedata = f.read()
         f.close()
         
-    def oldwalk(self):
-        sep1 = '\x04H\xfe\x13'
-        sep2 = '\x00\xdd\x01\x0fT\x02\x00\x00\x01'
-        continueSep = '\x81+\x1f\xa4\xbe\xa3\x10\x19\x9dn' #record continues
-        stopSep = ('\xd2', '\xd3', '\xd4') #this record ends here
-        
-        rec = None
-        for z in self.filedata.split(sep1):
-            for y in z.split(sep2):
-                if not rec: # start new record
-                    try: 
-                        rec = nk2addr(y)
-                    except:
-                        continue
-                    if not y.endswith(continueSep):
-                        self.records.append(rec)
-                        rec = None
-                    continue
-                rec.parseLine(y)
-                if not y.endswith(continueSep): # this
-                    self.records.append(rec)
-                    rec = None
-                    
-                #yield self.strp(y)
-    
     def parse(self):
         sep1 = '\x04H\xfe\x13' # record separator
         sep2 = '\x00\xdd\x01\x0fT\x02\x00\x00\x01'  # record separator
