@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Mon Jan  1 18:44:28 2007
+# Created: Mon Jan  1 19:05:16 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,14 +13,14 @@ from PyQt4 import QtCore, QtGui
 class Ui_debunk2(object):
     def setupUi(self, debunk2):
         debunk2.setObjectName("debunk2")
-        debunk2.resize(QtCore.QSize(QtCore.QRect(0,0,561,459).size()).expandedTo(debunk2.minimumSizeHint()))
-        debunk2.setSizeGripEnabled(True)
+        debunk2.resize(QtCore.QSize(QtCore.QRect(0,0,708,461).size()).expandedTo(debunk2.minimumSizeHint()))
+        debunk2.setSizeGripEnabled(False)
 
-        self.widget = QtGui.QWidget(debunk2)
-        self.widget.setGeometry(QtCore.QRect(10,12,541,439))
-        self.widget.setObjectName("widget")
+        self.layoutWidget = QtGui.QWidget(debunk2)
+        self.layoutWidget.setGeometry(QtCore.QRect(10,12,691,439))
+        self.layoutWidget.setObjectName("layoutWidget")
 
-        self.gridlayout = QtGui.QGridLayout(self.widget)
+        self.gridlayout = QtGui.QGridLayout(self.layoutWidget)
         self.gridlayout.setMargin(0)
         self.gridlayout.setSpacing(6)
         self.gridlayout.setObjectName("gridlayout")
@@ -28,7 +28,7 @@ class Ui_debunk2(object):
         spacerItem = QtGui.QSpacerItem(20,201,QtGui.QSizePolicy.Minimum,QtGui.QSizePolicy.Expanding)
         self.gridlayout.addItem(spacerItem,2,3,1,1)
 
-        self.nk2Location = QtGui.QComboBox(self.widget)
+        self.nk2Location = QtGui.QComboBox(self.layoutWidget)
         self.nk2Location.setAcceptDrops(True)
         self.nk2Location.setEditable(True)
         self.nk2Location.setAutoCompletion(True)
@@ -36,7 +36,7 @@ class Ui_debunk2(object):
         self.nk2Location.setObjectName("nk2Location")
         self.gridlayout.addWidget(self.nk2Location,0,0,1,1)
 
-        self.nk2Locator = QtGui.QPushButton(self.widget)
+        self.nk2Locator = QtGui.QPushButton(self.layoutWidget)
         self.nk2Locator.setObjectName("nk2Locator")
         self.gridlayout.addWidget(self.nk2Locator,0,1,1,1)
 
@@ -45,41 +45,41 @@ class Ui_debunk2(object):
         self.gridlayout1.setSpacing(6)
         self.gridlayout1.setObjectName("gridlayout1")
 
-        self.radioTSV = QtGui.QRadioButton(self.widget)
+        self.radioTSV = QtGui.QRadioButton(self.layoutWidget)
         self.radioTSV.setObjectName("radioTSV")
         self.gridlayout1.addWidget(self.radioTSV,2,0,1,1)
 
-        self.radioSSV = QtGui.QRadioButton(self.widget)
+        self.radioSSV = QtGui.QRadioButton(self.layoutWidget)
         self.radioSSV.setChecked(True)
         self.radioSSV.setObjectName("radioSSV")
         self.gridlayout1.addWidget(self.radioSSV,3,0,1,1)
 
-        self.radioCSV = QtGui.QRadioButton(self.widget)
+        self.radioCSV = QtGui.QRadioButton(self.layoutWidget)
         self.radioCSV.setChecked(False)
         self.radioCSV.setObjectName("radioCSV")
         self.gridlayout1.addWidget(self.radioCSV,1,0,1,1)
 
-        self.export = QtGui.QPushButton(self.widget)
+        self.export = QtGui.QPushButton(self.layoutWidget)
         self.export.setObjectName("export")
         self.gridlayout1.addWidget(self.export,6,0,1,1)
 
-        self.label_2 = QtGui.QLabel(self.widget)
+        self.label_2 = QtGui.QLabel(self.layoutWidget)
         self.label_2.setObjectName("label_2")
         self.gridlayout1.addWidget(self.label_2,0,0,1,1)
 
-        self.radioVCard = QtGui.QRadioButton(self.widget)
+        self.radioVCard = QtGui.QRadioButton(self.layoutWidget)
         self.radioVCard.setEnabled(False)
         self.radioVCard.setObjectName("radioVCard")
         self.gridlayout1.addWidget(self.radioVCard,5,0,1,1)
 
-        self.radioSyncML = QtGui.QRadioButton(self.widget)
+        self.radioSyncML = QtGui.QRadioButton(self.layoutWidget)
         self.radioSyncML.setEnabled(False)
         self.radioSyncML.setObjectName("radioSyncML")
         self.gridlayout1.addWidget(self.radioSyncML,4,0,1,1)
         self.gridlayout.addLayout(self.gridlayout1,1,3,1,1)
 
-        self.parsedTable = QtGui.QTableWidget(self.widget)
-        self.parsedTable.setMinimumSize(QtCore.QSize(450,400))
+        self.parsedTable = QtGui.QTableWidget(self.layoutWidget)
+        self.parsedTable.setMinimumSize(QtCore.QSize(600,400))
         self.parsedTable.setDragEnabled(True)
         self.parsedTable.setAlternatingRowColors(True)
         self.parsedTable.setObjectName("parsedTable")
