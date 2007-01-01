@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Mon Jan  1 19:15:36 2007
+# Created: Mon Jan  1 19:17:35 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -40,10 +40,11 @@ class Ui_debunk2(object):
         spacerItem = QtGui.QSpacerItem(271,27,QtGui.QSizePolicy.Expanding,QtGui.QSizePolicy.Minimum)
         self.gridlayout.addItem(spacerItem,0,2,1,2)
 
-        self.toolButton = QtGui.QToolButton(self.widget)
-        self.toolButton.setIcon(QtGui.QIcon("../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png"))
-        self.toolButton.setObjectName("toolButton")
-        self.gridlayout.addWidget(self.toolButton,0,4,1,1)
+        self.about = QtGui.QToolButton(self.widget)
+        self.about.setIcon(QtGui.QIcon("../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png"))
+        self.about.setAutoRaise(True)
+        self.about.setObjectName("about")
+        self.gridlayout.addWidget(self.about,0,4,1,1)
 
         self.parsedTable = QtGui.QTableWidget(self.widget)
         self.parsedTable.setMinimumSize(QtCore.QSize(600,400))
@@ -102,8 +103,8 @@ class Ui_debunk2(object):
         debunk2.setWindowTitle(QtGui.QApplication.translate("debunk2", "debuNK2", None, QtGui.QApplication.UnicodeUTF8))
         self.nk2Locator.setText(QtGui.QApplication.translate("debunk2", "&Locate NK2...", None, QtGui.QApplication.UnicodeUTF8))
         self.nk2Location.addItem(QtGui.QApplication.translate("debunk2", "Trying to find autocompletion (NK2) files...", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setToolTip(QtGui.QApplication.translate("debunk2", "About this program...", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("debunk2", "About...", None, QtGui.QApplication.UnicodeUTF8))
+        self.about.setToolTip(QtGui.QApplication.translate("debunk2", "About this program...", None, QtGui.QApplication.UnicodeUTF8))
+        self.about.setText(QtGui.QApplication.translate("debunk2", "About...", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.clear()
         self.parsedTable.setColumnCount(2)
         self.parsedTable.setRowCount(1)
