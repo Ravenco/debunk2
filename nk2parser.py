@@ -66,7 +66,15 @@ class nk2bib:
                     continue # couldn't find any email address in this record
                 rec.setAddress(split1[2])
                 rec.setName(unicode(split1[0][1:], "latin1"))
-                self.records.append(rec)
+                self.addRecord(rec)
+                #self.records.append(rec)
+    
+    def addRecord(self, rec):
+        "Add an nk2 record to the internal list of records"
+        assert(isinstance(rec, nk2addr))
+        #weed out byte by byte duplicates
+        if self.findRecord(rec.address): return
+        self.records.append(rec)
     
     def prn(self):
         for z in self.records: print z.__str__().encode('utf8')
