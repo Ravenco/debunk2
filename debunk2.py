@@ -45,6 +45,7 @@ class debunker(QtGui.QDialog):
         
         QtCore.QObject.connect(self.ui.nk2Locator, QtCore.SIGNAL('clicked()'), self.addNK2)
         QtCore.QObject.connect(self.ui.export, QtCore.SIGNAL('clicked()'), self.exportNK2)
+        QtCore.QObject.connect(self.ui.about, QtCore.SIGNAL('clicked()'), self.about)
 
         here = os.getenv('PWD')
         if here is not None:
@@ -160,6 +161,19 @@ class debunker(QtGui.QDialog):
 
     def info(self, text):
         ret = QtGui.QMessageBox.information(self, 'debuNK2 information', text)
+        return ret
+
+    def about(self):
+        "Display about this program message"
+        ret = QtGui.QMessageBox.information(self, 'About debuNK2',
+u"""DebuNK2 is a program to extract useful information from the autocomplete files of MS Outlook.
+
+Copyright (C) 2007 Håvard Dahle <havard@dahle.no>
+http://code.google.com/p/debunk2/
+
+The autocomplete (NK2) files store the name and email address of every outgoing e-mail sent in MS Outlook. This list of contacts is valuable data, but putting it to use is difficult since the file format is undocumented. By some tweaking, this program is able to read the name and addresses of ordinary email (SMTP) addressees. 
+
+As far as the author is aware, it does not loose data, but in certain cases (especially where non-English characters are involved) records may be skipped. Sorry. Sacrifice a chicken, then send me the file and I will fix it.""")
         return ret
 
 if __name__ == "__main__":
