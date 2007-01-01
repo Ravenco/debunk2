@@ -80,14 +80,15 @@ class debunker(QtGui.QDialog):
         self.ui.parsedTable.clear() # zap the existing contents 
         self.ui.parsedTable.setHorizontalHeaderItem(0, QtGui.QTableWidgetItem('Name'))
         self.ui.parsedTable.setHorizontalHeaderItem(1, QtGui.QTableWidgetItem('Address'))
-        self.ui.parsedTable.setRowCount(len(self.nk2.records) + 1) # expand table to keep all records
+        self.ui.parsedTable.setRowCount(len(self.nk2.records)) # expand table to keep all records
         i  = 0
         for rec in self.nk2.records:
             self.ui.parsedTable.setItem(i, 0, QtGui.QTableWidgetItem(rec.name))
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
             i += 1
         self.ui.parsedTable.resizeColumnsToContents()
-    
+        self.updateProgressbar(0)
+        
     def exportNK2(self):
         format = None
         controls = { CSV: self.ui.radioCSV,
@@ -140,12 +141,14 @@ class debunker(QtGui.QDialog):
         #we're using the table (and not self.nk2) since the user 
         #may have made changes to the table data
         i = 0
-        while i < 2: #len(self.ui.parsedTable):
+        total = self.ui.parsedTable.rowCount()
+        while i < total:
             name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
             address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
+            self.updateProgressbar(int(i/total)*100)
         file.close()
         
     def saveTableXml(self, file, format=SYNCML):
@@ -153,6 +156,13 @@ class debunker(QtGui.QDialog):
     
     def saveTableVCard(self, file):
         print "saveTableVCard"
+
+    def updateProgressbar(self, step):
+        assert(type(step) == types.IntType)
+        assert(step >= 0 and step <= 100) 
+        self.ui.progressBar.setValue(step)
+
+    
 
 if __name__ == "__main__":
 
