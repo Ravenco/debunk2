@@ -173,7 +173,11 @@ http://code.google.com/p/debunk2/
 
 The autocomplete (NK2) files store the name and email address of every outgoing e-mail sent in MS Outlook. This list of contacts is valuable data, but putting it to use is difficult since the file format is undocumented. By some tweaking, this program is able to read the name and addresses of ordinary email (SMTP) addressees. 
 
-As far as the author is aware, it does not loose data, but in certain cases (especially where non-English characters are involved) records may be skipped. Sorry. Sacrifice a chicken, then send me the file and I will fix it.""")
+As far as the author is aware, it does not loose data, but in certain cases (especially where non-English characters are involved) records may be skipped. Sorry. Sacrifice a chicken, then send me the file and I will fix it.
+
+The program and source code are fully available to anyone at any time, under the terms of the GPLv2 license.
+http://www.gnu.org/copyleft/gpl.html
+""")
         return ret
 
 if __name__ == "__main__":
