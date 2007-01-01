@@ -24,6 +24,11 @@ VCARD=5  # vcard spec
 SYNCML=6  # syncml
 ODT=7  # OpenSpreadsheet 
 
+INFO=1
+WARNING=2
+ERROR=3
+QUESTION=4
+
 class debunker(QtGui.QDialog):
     
     nk2 = None
@@ -87,7 +92,6 @@ class debunker(QtGui.QDialog):
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
             i += 1
         self.ui.parsedTable.resizeColumnsToContents()
-        self.updateProgressbar(0)
         
     def exportNK2(self):
         format = None
@@ -106,7 +110,8 @@ class debunker(QtGui.QDialog):
                                            "Select file name for export",
                                            defaultpath)
                                            
-        return self.saveTable(exportfile, format)
+        ret = self.saveTable(exportfile, format)
+        self.info('Names and email addresses were written successfully to %s' % exportfile)
     
     def addNK2(self):
         nk2file = QtGui.QFileDialog.getOpenFileName(self,
@@ -148,7 +153,6 @@ class debunker(QtGui.QDialog):
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
-            self.updateProgressbar(int(i/total)*100)
         file.close()
         
     def saveTableXml(self, file, format=SYNCML):
@@ -157,12 +161,9 @@ class debunker(QtGui.QDialog):
     def saveTableVCard(self, file):
         print "saveTableVCard"
 
-    def updateProgressbar(self, step):
-        assert(type(step) == types.IntType)
-        assert(step >= 0 and step <= 100) 
-        self.ui.progressBar.setValue(step)
-
-    
+    def info(self, text):
+        ret = QtGui.QMessageBox.information(self, 'debuNK2 information', text)
+        return ret
 
 if __name__ == "__main__":
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Sat Dec 30 20:18:18 2006
+# Created: Mon Jan  1 18:44:28 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,79 +13,80 @@ from PyQt4 import QtCore, QtGui
 class Ui_debunk2(object):
     def setupUi(self, debunk2):
         debunk2.setObjectName("debunk2")
-        debunk2.resize(QtCore.QSize(QtCore.QRect(0,0,615,479).size()).expandedTo(debunk2.minimumSizeHint()))
+        debunk2.resize(QtCore.QSize(QtCore.QRect(0,0,561,459).size()).expandedTo(debunk2.minimumSizeHint()))
         debunk2.setSizeGripEnabled(True)
 
-        self.parsedTable = QtGui.QTableWidget(debunk2)
-        self.parsedTable.setGeometry(QtCore.QRect(10,60,481,381))
-        self.parsedTable.setDragEnabled(True)
-        self.parsedTable.setAlternatingRowColors(True)
-        self.parsedTable.setObjectName("parsedTable")
+        self.widget = QtGui.QWidget(debunk2)
+        self.widget.setGeometry(QtCore.QRect(10,12,541,439))
+        self.widget.setObjectName("widget")
 
-        self.nk2Location = QtGui.QComboBox(debunk2)
-        self.nk2Location.setGeometry(QtCore.QRect(10,30,381,22))
+        self.gridlayout = QtGui.QGridLayout(self.widget)
+        self.gridlayout.setMargin(0)
+        self.gridlayout.setSpacing(6)
+        self.gridlayout.setObjectName("gridlayout")
+
+        spacerItem = QtGui.QSpacerItem(20,201,QtGui.QSizePolicy.Minimum,QtGui.QSizePolicy.Expanding)
+        self.gridlayout.addItem(spacerItem,2,3,1,1)
+
+        self.nk2Location = QtGui.QComboBox(self.widget)
         self.nk2Location.setAcceptDrops(True)
         self.nk2Location.setEditable(True)
         self.nk2Location.setAutoCompletion(True)
         self.nk2Location.setDuplicatesEnabled(False)
         self.nk2Location.setObjectName("nk2Location")
+        self.gridlayout.addWidget(self.nk2Location,0,0,1,1)
 
-        self.nk2Locator = QtGui.QPushButton(debunk2)
-        self.nk2Locator.setGeometry(QtCore.QRect(400,25,91,27))
+        self.nk2Locator = QtGui.QPushButton(self.widget)
         self.nk2Locator.setObjectName("nk2Locator")
+        self.gridlayout.addWidget(self.nk2Locator,0,1,1,1)
 
-        self.widget = QtGui.QWidget(debunk2)
-        self.widget.setGeometry(QtCore.QRect(500,60,83,197))
-        self.widget.setObjectName("widget")
-
-        self.vboxlayout = QtGui.QVBoxLayout(self.widget)
-        self.vboxlayout.setMargin(0)
-        self.vboxlayout.setSpacing(6)
-        self.vboxlayout.setObjectName("vboxlayout")
-
-        self.label_2 = QtGui.QLabel(self.widget)
-        self.label_2.setObjectName("label_2")
-        self.vboxlayout.addWidget(self.label_2)
-
-        self.radioCSV = QtGui.QRadioButton(self.widget)
-        self.radioCSV.setChecked(False)
-        self.radioCSV.setObjectName("radioCSV")
-        self.vboxlayout.addWidget(self.radioCSV)
+        self.gridlayout1 = QtGui.QGridLayout()
+        self.gridlayout1.setMargin(0)
+        self.gridlayout1.setSpacing(6)
+        self.gridlayout1.setObjectName("gridlayout1")
 
         self.radioTSV = QtGui.QRadioButton(self.widget)
         self.radioTSV.setObjectName("radioTSV")
-        self.vboxlayout.addWidget(self.radioTSV)
+        self.gridlayout1.addWidget(self.radioTSV,2,0,1,1)
 
         self.radioSSV = QtGui.QRadioButton(self.widget)
         self.radioSSV.setChecked(True)
         self.radioSSV.setObjectName("radioSSV")
-        self.vboxlayout.addWidget(self.radioSSV)
+        self.gridlayout1.addWidget(self.radioSSV,3,0,1,1)
 
-        self.radioSyncML = QtGui.QRadioButton(self.widget)
-        self.radioSyncML.setEnabled(False)
-        self.radioSyncML.setObjectName("radioSyncML")
-        self.vboxlayout.addWidget(self.radioSyncML)
+        self.radioCSV = QtGui.QRadioButton(self.widget)
+        self.radioCSV.setChecked(False)
+        self.radioCSV.setObjectName("radioCSV")
+        self.gridlayout1.addWidget(self.radioCSV,1,0,1,1)
+
+        self.export = QtGui.QPushButton(self.widget)
+        self.export.setObjectName("export")
+        self.gridlayout1.addWidget(self.export,6,0,1,1)
+
+        self.label_2 = QtGui.QLabel(self.widget)
+        self.label_2.setObjectName("label_2")
+        self.gridlayout1.addWidget(self.label_2,0,0,1,1)
 
         self.radioVCard = QtGui.QRadioButton(self.widget)
         self.radioVCard.setEnabled(False)
         self.radioVCard.setObjectName("radioVCard")
-        self.vboxlayout.addWidget(self.radioVCard)
+        self.gridlayout1.addWidget(self.radioVCard,5,0,1,1)
 
-        self.export = QtGui.QPushButton(self.widget)
-        self.export.setObjectName("export")
-        self.vboxlayout.addWidget(self.export)
+        self.radioSyncML = QtGui.QRadioButton(self.widget)
+        self.radioSyncML.setEnabled(False)
+        self.radioSyncML.setObjectName("radioSyncML")
+        self.gridlayout1.addWidget(self.radioSyncML,4,0,1,1)
+        self.gridlayout.addLayout(self.gridlayout1,1,3,1,1)
 
-        self.progressBar = QtGui.QProgressBar(debunk2)
-        self.progressBar.setGeometry(QtCore.QRect(10,450,118,23))
-        self.progressBar.setProperty("value",QtCore.QVariant(0))
-        self.progressBar.setOrientation(QtCore.Qt.Horizontal)
-        self.progressBar.setObjectName("progressBar")
+        self.parsedTable = QtGui.QTableWidget(self.widget)
+        self.parsedTable.setMinimumSize(QtCore.QSize(450,400))
+        self.parsedTable.setDragEnabled(True)
+        self.parsedTable.setAlternatingRowColors(True)
+        self.parsedTable.setObjectName("parsedTable")
+        self.gridlayout.addWidget(self.parsedTable,1,0,2,3)
 
-        self.statusBar = QtGui.QLabel(debunk2)
-        self.statusBar.setGeometry(QtCore.QRect(138,450,351,23))
-        self.statusBar.setMinimumSize(QtCore.QSize(0,23))
-        self.statusBar.setFrameShape(QtGui.QFrame.Box)
-        self.statusBar.setObjectName("statusBar")
+        spacerItem1 = QtGui.QSpacerItem(81,20,QtGui.QSizePolicy.Expanding,QtGui.QSizePolicy.Minimum)
+        self.gridlayout.addItem(spacerItem1,0,2,1,1)
 
         self.retranslateUi(debunk2)
         QtCore.QMetaObject.connectSlotsByName(debunk2)
@@ -94,6 +95,18 @@ class Ui_debunk2(object):
 
     def retranslateUi(self, debunk2):
         debunk2.setWindowTitle(QtGui.QApplication.translate("debunk2", "debuNK2", None, QtGui.QApplication.UnicodeUTF8))
+        self.nk2Location.addItem(QtGui.QApplication.translate("debunk2", "Trying to find autocompletion (NK2) files...", None, QtGui.QApplication.UnicodeUTF8))
+        self.nk2Locator.setText(QtGui.QApplication.translate("debunk2", "&Locate NK2...", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioTSV.setToolTip(QtGui.QApplication.translate("debunk2", "Tab-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioTSV.setText(QtGui.QApplication.translate("debunk2", "TSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSSV.setToolTip(QtGui.QApplication.translate("debunk2", "Semicolon-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSSV.setText(QtGui.QApplication.translate("debunk2", "SSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioCSV.setToolTip(QtGui.QApplication.translate("debunk2", "Comma-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioCSV.setText(QtGui.QApplication.translate("debunk2", "CSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.export.setText(QtGui.QApplication.translate("debunk2", "E&xport...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("debunk2", "Export to file:", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "VCard", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSyncML.setText(QtGui.QApplication.translate("debunk2", "SyncML", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.clear()
         self.parsedTable.setColumnCount(2)
         self.parsedTable.setRowCount(1)
@@ -109,19 +122,6 @@ class Ui_debunk2(object):
         headerItem2 = QtGui.QTableWidgetItem()
         headerItem2.setText(QtGui.QApplication.translate("debunk2", "Address", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.setHorizontalHeaderItem(1,headerItem2)
-        self.nk2Location.addItem(QtGui.QApplication.translate("debunk2", "Trying to find autocompletion (NK2) files...", None, QtGui.QApplication.UnicodeUTF8))
-        self.nk2Locator.setText(QtGui.QApplication.translate("debunk2", "&Locate NK2...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("debunk2", "Export to file:", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioCSV.setToolTip(QtGui.QApplication.translate("debunk2", "Comma-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioCSV.setText(QtGui.QApplication.translate("debunk2", "CSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioTSV.setToolTip(QtGui.QApplication.translate("debunk2", "Tab-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioTSV.setText(QtGui.QApplication.translate("debunk2", "TSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSSV.setToolTip(QtGui.QApplication.translate("debunk2", "Semicolon-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSSV.setText(QtGui.QApplication.translate("debunk2", "SSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSyncML.setText(QtGui.QApplication.translate("debunk2", "SyncML", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "VCard", None, QtGui.QApplication.UnicodeUTF8))
-        self.export.setText(QtGui.QApplication.translate("debunk2", "E&xport...", None, QtGui.QApplication.UnicodeUTF8))
-        self.statusBar.setText(QtGui.QApplication.translate("debunk2", "debuNK2 (C) 2006 havard@dahle.no", None, QtGui.QApplication.UnicodeUTF8))
 
 
 if __name__ == "__main__":
