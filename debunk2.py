@@ -24,9 +24,10 @@ VCARD=5  # vcard spec
 SYNCML=6  # syncml
 ODT=7  # OpenSpreadsheet 
 
-class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
+class debunker(QtGui.QDialog):
     
     nk2 = None
+    startuppath = None
     pathlist = []
     
     def __init__(self):
@@ -34,11 +35,16 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
         self.ui = debunk2_ui.Ui_debunk2()
         self.ui.setupUi(self)
         
-        #QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('highlighted(int)'), self.loadNK2)
         QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('currentIndexChanged(int)'), self.loadNK2)
+        QtCore.QObject.connect(self.ui.nk2Location, QtCore.SIGNAL('editTextChanged(QString)'), self.loadNK2)
+        QtCore.QObject.connect(self, QtCore.SIGNAL('pathlistChanged'), self.loadNK2)
+        
+        QtCore.QObject.connect(self.ui.nk2Locator, QtCore.SIGNAL('clicked()'), self.addNK2)
+        QtCore.QObject.connect(self.ui.export, QtCore.SIGNAL('clicked()'), self.exportNK2)
 
         here = os.getenv('PWD')
         if here is not None:
+            self.startuppath = here
             self.pathlist.append(here)
         
         self.displayPaths(self.findNK2())
@@ -55,16 +61,18 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
         return locations
     
     def displayPaths(self, pathlist):
-        "Displays different paths so the user can choose"
+        "Displays different paths in the combobox so the user can choose"
+        assert(type(pathlist) == types.ListType)
         self.ui.nk2Location.clear()
         self.ui.nk2Location.insertItems(0, pathlist)
-    
+        self.emit(QtCore.SIGNAL('pathlistChanged'))
     
     def loadNK2(self, item=0):
         "Load an NK2 and display it"
         path = unicode(self.ui.nk2Location.currentText())
         print "path", path
         assert(os.path.exists(path))
+        assert(os.path.isfile(path))
         #del(self.nk2)
         self.nk2 = nk2parser.nk2bib(path)  # init the parser
         self.nk2.parse()                   # slurp the file
@@ -80,17 +88,71 @@ class debunker(QtGui.QDialog):#, debunk2_ui.Ui_debunk2):
             i += 1
         self.ui.parsedTable.resizeColumnsToContents()
     
-    def saveTable(self, format=SSV):
-        if format in (CSV, TSV, SSV):
-            return self.saveTableCharacterSeparated(format)
-        elif format == XML:
-            return self.saveTableXml()
-        
-    def saveTableCharacterSeparated(self, format):
-        pass
+    def exportNK2(self):
+        format = None
+        controls = { CSV: self.ui.radioCSV,
+                     TSV: self.ui.radioTSV,
+                     SSV: self.ui.radioSSV,
+                     SYNCML : self.ui.radioSyncML,
+                     VCARD : self.ui.radioVCard }
+        for c in controls.keys():
+            if controls[c].isChecked(): 
+                format = c
+                break
+        print "format: ", format
+        defaultpath = os.path.join(self.startuppath, 'outlook-export.csv')
+        exportfile = QtGui.QFileDialog.getSaveFileName(self, 
+                                           "Select file name for export",
+                                           defaultpath)
+                                           
+        return self.saveTable(exportfile, format)
     
-    def saveTableXml(self):
-        pass
+    def addNK2(self):
+        nk2file = QtGui.QFileDialog.getOpenFileName(self,
+                                              'Select your autocomplete file',
+                                              self.startuppath,
+                                              'Autocomplete files (*.NK2)')
+        print "adding nk2:", nk2file
+        pathlist = [nk2file,] + self.findNK2()
+        self.displayPaths(pathlist)
+        
+    def saveTable(self, fileobject, format=SSV):
+        if format in (CSV, TSV, SSV):
+            return self.saveTableCharacterSeparated(fileobject, format)
+        elif format in (SYNCML, XML):
+            return self.saveTableXml(fileobject, format)
+        elif format == VCARD:
+            return self.saveTableVCard(fileobject)
+        
+    def saveTableCharacterSeparated(self, file, format):
+        seps = { CSV:',',
+                 TSV:'\t',
+                 SSV:';' }
+        separator = seps[format]
+        print "charsep: --%s-- " % separator
+        #make sure the file is something we can write to
+        if type(file) != types.FileType:
+            #assert
+            file = open(file, 'wb')
+        assert(hasattr(file, 'write'))
+        
+        #loop thru the table
+        #we're using the table (and not self.nk2) since the user 
+        #may have made changes to the table data
+        i = 0
+        while i < 2: #len(self.ui.parsedTable):
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            file.write("'%s'%s%s\r\n" % (name, separator, address))
+            print "wrote '%s'%s%s" % (name, separator, address)
+            i += 1
+        file.close()
+        
+    def saveTableXml(self, file, format=SYNCML):
+        print "saveTableXml"
+    
+    def saveTableVCard(self, file):
+        print "saveTableVCard"
 
 if __name__ == "__main__":
 

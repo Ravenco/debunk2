@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>592</width>
-    <height>470</height>
+    <width>615</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -15,109 +15,6 @@
   <property name="sizeGripEnabled" >
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="Layout5" >
-   <property name="geometry" >
-    <rect>
-     <x>500</x>
-     <y>30</y>
-     <width>82</width>
-     <height>410</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" >
-    <property name="margin" >
-     <number>0</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item>
-     <widget class="QPushButton" name="buttonOk" >
-      <property name="text" >
-       <string>&amp;OK</string>
-      </property>
-      <property name="shortcut" >
-       <string/>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-      <property name="default" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="buttonCancel" >
-      <property name="text" >
-       <string>&amp;Cancel</string>
-      </property>
-      <property name="shortcut" >
-       <string/>
-      </property>
-      <property name="autoDefault" >
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer>
-      <property name="orientation" >
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType" >
-       <enum>QSizePolicy::Expanding</enum>
-      </property>
-      <property name="sizeHint" >
-       <size>
-        <width>20</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QComboBox" name="nk2Location" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>30</y>
-     <width>371</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="acceptDrops" >
-    <bool>true</bool>
-   </property>
-   <property name="editable" >
-    <bool>true</bool>
-   </property>
-   <property name="autoCompletion" >
-    <bool>true</bool>
-   </property>
-   <property name="duplicatesEnabled" >
-    <bool>false</bool>
-   </property>
-   <item>
-    <property name="text" >
-     <string>Trying to find autocompletion (NK2) files...</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QPushButton" name="nk2Locator" >
-   <property name="geometry" >
-    <rect>
-     <x>390</x>
-     <y>30</y>
-     <width>94</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Locate NK2...</string>
-   </property>
-  </widget>
   <widget class="QTableWidget" name="parsedTable" >
    <property name="geometry" >
     <rect>
@@ -149,6 +46,172 @@
     </property>
    </column>
   </widget>
+  <widget class="QComboBox" name="nk2Location" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>381</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="acceptDrops" >
+    <bool>true</bool>
+   </property>
+   <property name="editable" >
+    <bool>true</bool>
+   </property>
+   <property name="autoCompletion" >
+    <bool>true</bool>
+   </property>
+   <property name="duplicatesEnabled" >
+    <bool>false</bool>
+   </property>
+   <item>
+    <property name="text" >
+     <string>Trying to find autocompletion (NK2) files...</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="nk2Locator" >
+   <property name="geometry" >
+    <rect>
+     <x>400</x>
+     <y>25</y>
+     <width>91</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>&amp;Locate NK2...</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="" >
+   <property name="geometry" >
+    <rect>
+     <x>500</x>
+     <y>60</y>
+     <width>83</width>
+     <height>197</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_2" >
+      <property name="text" >
+       <string>Export to file:</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioCSV" >
+      <property name="toolTip" >
+       <string>Comma-separated values</string>
+      </property>
+      <property name="text" >
+       <string>CSV</string>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioTSV" >
+      <property name="toolTip" >
+       <string>Tab-separated values</string>
+      </property>
+      <property name="text" >
+       <string>TSV</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioSSV" >
+      <property name="toolTip" >
+       <string>Semicolon-separated values</string>
+      </property>
+      <property name="text" >
+       <string>SSV</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioSyncML" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+      <property name="text" >
+       <string>SyncML</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="radioVCard" >
+      <property name="enabled" >
+       <bool>false</bool>
+      </property>
+      <property name="text" >
+       <string>VCard</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="export" >
+      <property name="text" >
+       <string>E&amp;xport...</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QProgressBar" name="progressBar" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>450</y>
+     <width>118</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value" >
+    <number>0</number>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="statusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>138</x>
+     <y>450</y>
+     <width>351</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>0</width>
+     <height>23</height>
+    </size>
+   </property>
+   <property name="frameShape" >
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="text" >
+    <string>debuNK2 (C) 2006 havard@dahle.no</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
@@ -156,42 +219,7 @@
   <tabstop>nk2Location</tabstop>
   <tabstop>nk2Locator</tabstop>
   <tabstop>parsedTable</tabstop>
-  <tabstop>buttonOk</tabstop>
-  <tabstop>buttonCancel</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonOk</sender>
-   <signal>clicked()</signal>
-   <receiver>debunk2</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>501</x>
-     <y>31</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>debunk2</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>501</x>
-     <y>64</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
