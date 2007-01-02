@@ -11,9 +11,46 @@
 
 __doc__ = """Export MS Outlook NK2 files into something readable by humans and machines (qt4 gui)
 """
+
 import sys, types, os.path, os, glob
-from PyQt4 import QtCore, QtGui, uic
-import debunk2_ui, nk2parser
+
+def printerror(errormsg):
+    "Display an error message on the console and, if possible, on the gui"
+    print errormsg
+    guis = [ ['zenity', '--error', '--text', errormsg],
+             ['kdialog', '--error', errormsg],
+             #'gdialog': '--error "%s"', ### how does gdialog work?
+             ['xmessage', '-center', errormsg],
+             #'win32', '--er'  # how to do this on win32?
+             #'macosx', '--er'  # how to do this on macosx?
+           ]
+    for g in guis:
+        print g
+        try:
+            s = os.spawnvp(os.P_WAIT, g[0], g)
+        except:
+            #grr
+            pass
+        else:
+            if s == 0: # dialog was shown, stop now
+                break
+try:
+    from PyQt4 import QtCore, QtGui, uic
+except ImportError:
+    #grr. pyqt4 is not (properly) installed
+    printerror("""You need pyqt4 to run this program
+Try to run nk2parser.py directly for a non-gui version""")
+    sys.exit(1)
+
+try:
+    import debunk2_ui, nk2parser
+except ImportError:
+    #grr. Something is severly wrong
+    printerror("""Something is severely wrong. 
+    
+Couldn't load the rest of the program. Seek help.""")
+    raise #show the real error
+
 
 # constants
 CSV=1  # comma-separated
@@ -149,7 +186,7 @@ class debunker(QtGui.QDialog):
             name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
             address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
             file.write("'%s'%s%s\r\n" % (name, separator, address))
-            print "wrote '%s'%s%s" % (name, separator, address)
+            #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
         file.close()
         
@@ -171,7 +208,7 @@ u"""DebuNK2 is a program to extract useful information from the autocomplete fil
 Copyright (C) 2007 Håvard Dahle <havard@dahle.no>
 http://code.google.com/p/debunk2/
 
-The autocomplete (NK2) files store the name and email address of every outgoing e-mail sent in MS Outlook. This list of contacts is valuable data, but putting it to use is difficult since the file format is undocumented. By some tweaking, this program is able to read the name and addresses of ordinary email (SMTP) addressees. 
+The autocomplete (NK2) files store the name and email address (and more) of every outgoing e-mail sent in MS Outlook. This list of contacts is valuable data, but putting it to use is difficult since the file format is undocumented. By some tweaking, this program is able to read the name and addresses of ordinary email (SMTP) addressees.
 
 As far as the author is aware, it does not loose data, but in certain cases (especially where non-English characters are involved) records may be skipped. Sorry. Sacrifice a chicken, then send me the file and I will fix it.
 
