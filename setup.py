@@ -28,7 +28,7 @@ setup(name="debunk2",
            ],
       scripts=["debunk2.py"],
       license="GPL2",
-      #long_description="""Microsoft Outlook stores its autocomplete email info in an undocumented file format. This project tries to unlock the information therein.""",
+      long_description="""Microsoft Outlook stores its autocomplete email info in an undocumented file format. This project tries to unlock the information therein.""",
       #install_requires = ['docutils>=0.3', 'reportlab'],
       #zip_safe=True,
      )
