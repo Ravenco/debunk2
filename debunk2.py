@@ -93,8 +93,7 @@ class debunker(QtGui.QDialog):
         
     def findNK2(self):
         "Look in the default places for an NK2 file. Returns list of found files"
-        #return "test.NK2"
-        locations = []
+        locations = [] #XXX: TODO: Find default locations on win32
         for p in self.pathlist:
             locations += glob.glob(p+"/*.NK2")
             locations += glob.glob(p+"/*.nk2")
@@ -117,7 +116,7 @@ class debunker(QtGui.QDialog):
         self.nk2 = nk2parser.nk2bib(path)  # init the parser
         self.nk2.parse()                   # slurp the file
         #self.nk2.check()
-        self.ui.parsedTable.clear() # zap the existing contents 
+        self.ui.parsedTable.clear() # zap the existing table 
         self.ui.parsedTable.setHorizontalHeaderItem(0, QtGui.QTableWidgetItem('Name'))
         self.ui.parsedTable.setHorizontalHeaderItem(1, QtGui.QTableWidgetItem('Address'))
         self.ui.parsedTable.setRowCount(len(self.nk2.records)) # expand table to keep all records
@@ -126,7 +125,7 @@ class debunker(QtGui.QDialog):
             self.ui.parsedTable.setItem(i, 0, QtGui.QTableWidgetItem(rec.name))
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
             i += 1
-        self.ui.parsedTable.resizeColumnsToContents()
+        self.ui.parsedTable.resizeColumnsToContents() # resize so it looks nice
         
     def exportNK2(self):
         format = None
@@ -194,7 +193,30 @@ class debunker(QtGui.QDialog):
         print "saveTableXml"
     
     def saveTableVCard(self, file):
+        #http://www.imc.org/pdi/vcard-21.rtf
         print "saveTableVCard"
+        if type(file) != types.FileType:
+            #assert
+            file = open(file, 'wb')
+        assert(hasattr(file, 'write'))
+        #loop thru the table
+        #we're using the table (and not self.nk2) since the user 
+        #may have made changes to the table data
+        i = 0
+        total = self.ui.parsedTable.rowCount()
+        while i < total:
+            file.write("BEGIN:VCARD\r\n") #Begin vcard
+            file.write("VERSION:2.1\r\n") 
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
+            file.write("FN;CHARSET=UTF-8:%s\r\n" name)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            file.write("EMAIL;INTERNET;CHARSET=UTF-8:%s\r\n" address)
+            
+            #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
+            file.write("END:VCARD\r\n\r\n") #end vcard
+            i += 1
+        file.close()
+        
 
     def info(self, text):
         ret = QtGui.QMessageBox.information(self, 'debuNK2 information', text)
