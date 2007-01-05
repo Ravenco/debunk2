@@ -208,9 +208,9 @@ class debunker(QtGui.QDialog):
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
             name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            file.write("FN;CHARSET=UTF-8:%s\r\n" name)
+            file.write("FN;CHARSET=UTF-8:%s\r\n" % name)
             address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
-            file.write("EMAIL;INTERNET;CHARSET=UTF-8:%s\r\n" address)
+            file.write("EMAIL;INTERNET;CHARSET=UTF-8:%s\r\n" % address)
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
