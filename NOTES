@@ -1,0 +1,14 @@
+## developer info
+## $Id$
+## (C) 2007 <havard@dahle.no>
+
+== BRANCHING ==
+
+* export VERSION=x.x
+* svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/branches/$VERSION -m "Branching to version $VERSION"
+
+== TAGGING ==
+
+* export VERSION=x.x
+* svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/tags/$VERSION -m "Tagging version $VERSION"
+
