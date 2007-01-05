@@ -13,6 +13,11 @@
 from distutils.core import setup
 #from setuptools import setup
 
+try:
+    import py2exe
+except ImportError:
+    print "py2exe not installed. You will not be able to create windows executables"
+
 import sys, os.path
 
 import nk2parser
