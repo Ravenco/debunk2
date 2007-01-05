@@ -12,6 +12,8 @@
 __doc__ = """Parse MS Outlook NK2 files into something readable by humans and machines
 """
 
+__version__ = 0.2
+
 import types, sys, os.path
 
 NUL='\x00'
@@ -186,9 +188,9 @@ def dbg(s, level=0):
     if level <= DEBUGLEVEL:
         print "[nk2parser]:",repr(s)
 
-
 if __name__ == '__main__':
     DEBUGLEVEL = sys.argv.count('-d')
+    if DEBUGLEVEL > 0 or '-v' in sys.argv: print "This is nk2parser version %s" % __version__
     assert(os.path.exists(sys.argv[1]))
     nk2 = nk2bib(sys.argv[1])
     nk2.parse()

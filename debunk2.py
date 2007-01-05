@@ -224,8 +224,10 @@ class debunker(QtGui.QDialog):
 
     def about(self):
         "Display about this program message"
-        ret = QtGui.QMessageBox.information(self, 'About debuNK2',
-u"""DebuNK2 is a program to extract useful information from the autocomplete files of MS Outlook.
+        ret = QtGui.QMessageBox.information(self, 'About debuNK2 %s' % nk2parser.__version__,
+u"""DebuNK2 version %s
+
+DebuNK2 is a program to extract useful information from the autocomplete files of MS Outlook.
 
 Copyright (C) 2007 Håvard Dahle <havard@dahle.no>
 http://code.google.com/p/debunk2/
@@ -236,7 +238,7 @@ As far as the author is aware, it does not loose data, but in certain cases (esp
 
 The program and source code are fully available to anyone at any time, under the terms of the GPLv2 license.
 http://www.gnu.org/copyleft/gpl.html
-""")
+""" % (nk2parser.__version__) )
         return ret
 
 if __name__ == "__main__":

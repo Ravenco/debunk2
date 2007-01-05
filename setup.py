@@ -15,9 +15,10 @@ from distutils.core import setup
 
 import sys, os.path
 
+import nk2parser
 
 setup(name="debunk2",
-      version=0.1,
+      version=nk2parser.__version__,
       description="Read MS Outlook autocomplete (NK2) files and extract email addresses",
       author='Håvard Dahle',
       author_email="havard@dahle.no",
