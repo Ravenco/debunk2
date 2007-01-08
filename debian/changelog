@@ -1,3 +1,11 @@
+debunk2 (0.3) unstable; urgency=low
+
+  * A proper about box
+  * Runs on win32 for real (but still needs Qt, PyQt and Python installed)
+  * Lots of small stuff 
+
+ -- Håvard Dahle <hadahl@hadahl>  Mon,  8 Jan 2007 21:27:13 +0100
+
 debunk2 (0.2) unstable; urgency=low
 
   * Initial Release.
