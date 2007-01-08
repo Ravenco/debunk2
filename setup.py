@@ -18,10 +18,13 @@
 from distutils.core import setup
 #from setuptools import setup
 
+PY2EXE=False
+
 try:
     import py2exe
+    PY2EXE=True
 except ImportError:
-    print "py2exe not installed. You will not be able to create windows executables"
+    print "Warning: py2exe not installed. You will not be able to create windows executables"
 
 import sys, os.path
 
@@ -33,7 +36,8 @@ setup(name="debunk2",
       author='Håvard Dahle',
       author_email="havard@dahle.no",
       url="http://code.google.com/p/debunk2/",
-      #packages=['finfaktura',],
+      download_url='http://code.google.com/p/debunk2/downloads/list', 
+      py_modules=['nk2parser', 'debunk2_ui'],
       data_files=[#('share/finfaktura/pixmaps', ['pixmaps/error.png', 'pixmaps/warning.png']),
             ('share/debunk2/data', ['debunk2.ui', ]),
            ],

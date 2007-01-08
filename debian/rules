@@ -70,10 +70,11 @@ install: build
 # 	$(MAKE) install DESTDIR=$(CURDIR)/debian/debunk2
 	# Add here commands to install the arch part of the package into 
 	# debian/tmp.
-	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/tmp/usr
-
-        # Nuke *.pyc files that shouldn't be packaged
-	find debian/tmp -name "*.pyc" -exec rm {} \;
+# 	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/tmp/usr
+	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/debunk2/usr
+        
+	# Nuke *.pyc files that shouldn't be packaged
+	find debian/debunk2 -name "*.pyc" -exec rm {} \;
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -86,7 +87,7 @@ binary-arch: build install
 	dh_installchangelogs 
 # 	dh_installdocs
 # 	dh_installexamples
-#	dh_install
+	dh_install
 #	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate
