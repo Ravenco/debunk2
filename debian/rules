@@ -2,12 +2,11 @@
 # -*- makefile -*-
 # Sample debian/rules that uses debhelper.
 # This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# Modified for python and the debunk2 project
+# Håvard Dahle <havard@dahle.no>
+# $Id
+#
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
@@ -38,7 +37,7 @@ build: build-stamp
 	$(DH_PY_INTERPRETER) setup.py build
 
 	# always regenerate from ui files
-	(pyuic4 -x debunk2.ui > debunk_ui2.py)
+	(pyuic4 -x debunk2.ui > debunk2_ui.py)
 	
 build-stamp: configure-stamp 
 	dh_testdir
