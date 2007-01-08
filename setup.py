@@ -10,6 +10,11 @@
 ###########################################################################
 
 
+# To create win32 bdist exe: python setup.py py2exe --includes sip
+# To create source: python setup.py 
+#
+#
+
 from distutils.core import setup
 #from setuptools import setup
 
@@ -33,6 +38,7 @@ setup(name="debunk2",
             ('share/debunk2/data', ['debunk2.ui', ]),
            ],
       scripts=["debunk2.py"],
+      console=['debunk2.py'], # for py2exe
       license="GPL2",
       long_description="""Microsoft Outlook stores its autocomplete email info in an undocumented file format. This project tries to unlock the information therein.""",
       #install_requires = ['docutils>=0.3', 'reportlab'],
