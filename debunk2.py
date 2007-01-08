@@ -51,7 +51,11 @@ except ImportError:
 Couldn't load the rest of the program. Seek help.""")
     raise #show the real error
 
-from xml.etree import ElementTree # py2exe needs this import statement
+try:
+    from xml.etree import ElementTree # py2exe needs this import statement
+except ImportError:
+    #oh oh. we're fucked
+    print "You may have problems creating exe files. If you don't intend to do that, have a nice day"
 
 # constants
 CSV=1  # comma-separated
