@@ -51,6 +51,7 @@ except ImportError:
 Couldn't load the rest of the program. Seek help.""")
     raise #show the real error
 
+from xml.etree import ElementTree # py2exe needs this import statement
 
 # constants
 CSV=1  # comma-separated
@@ -69,7 +70,7 @@ QUESTION=4
 class debunker(QtGui.QDialog):
     
     nk2 = None
-    startuppath = None
+    startuppath = ''
     pathlist = []
     
     def __init__(self):
@@ -84,11 +85,14 @@ class debunker(QtGui.QDialog):
         QtCore.QObject.connect(self.ui.export, QtCore.SIGNAL('clicked()'), self.exportNK2)
         QtCore.QObject.connect(self.ui.about, QtCore.SIGNAL('clicked()'), self.about)
 
-        here = os.getenv('PWD')
-        if here is not None:
-            self.startuppath = here
-            self.pathlist.append(here)
-        
+        locs = ['USERPROFILE', 'PWD', 'SYSTEMDRIVE']
+        for v in locs:
+            here = os.getenv(v)
+            if here is not None:
+                self.startuppath = here
+                self.pathlist.append(here)
+                break
+        #print self.startuppath
         self.displayPaths(self.findNK2())
         
     def findNK2(self):
