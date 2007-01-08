@@ -4,11 +4,15 @@
 
 == BRANCHING ==
 
-* export VERSION=x.x
-* svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/branches/$VERSION -m "Branching to version $VERSION"
+ * export VERSION=x.x
+ * svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/branches/$VERSION -m "Branching to version $VERSION"
 
 == TAGGING ==
 
-* export VERSION=x.x
-* svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/tags/$VERSION -m "Tagging version $VERSION"
+ * export VERSION=x.x
+ * svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/tags/$VERSION -m "Tagging version $VERSION"
 
+== UPGRADING THE CHANGELOG ==
+
+ * export VERSION=x.x
+ * dch --newversion VERSION

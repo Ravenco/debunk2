@@ -9,16 +9,22 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+DH_PY_INTERPRETER=/usr/bin/python
 
 
-
-CFLAGS = -Wall -g
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
+# CFLAGS = -Wall -g
+# 
+# ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+# 	CFLAGS += -O0
+# else
+# 	CFLAGS += -O2
+# endif
 
 configure: configure-stamp
 configure-stamp:
@@ -29,12 +35,16 @@ configure-stamp:
 
 
 build: build-stamp
+	$(DH_PY_INTERPRETER) setup.py build
 
+	# always regenerate from ui files
+	(pyuic4 -x debunk2.ui > debunk_ui2.py)
+	
 build-stamp: configure-stamp 
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE)
+# 	$(MAKE)
 	#docbook-to-man debian/debunk2.sgml > debunk2.1
 
 	touch $@
@@ -43,9 +53,11 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp configure-stamp
-
+        #$(DH_PY_INTERPRETER) setup.py clean
+	rm -rf build/
+# 	find finfaktura/ -name "*.pyc" -exec rm -f {} \;
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
+
 
 	dh_clean 
 
@@ -56,8 +68,13 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/debunk2.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/debunk2
+# 	$(MAKE) install DESTDIR=$(CURDIR)/debian/debunk2
+	# Add here commands to install the arch part of the package into 
+	# debian/tmp.
+	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/tmp/usr
 
+        # Nuke *.pyc files that shouldn't be packaged
+	find debian/tmp -name "*.pyc" -exec rm {} \;
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -68,8 +85,8 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
-	dh_installdocs
-	dh_installexamples
+# 	dh_installdocs
+# 	dh_installexamples
 #	dh_install
 #	dh_installmenu
 #	dh_installdebconf	
@@ -77,13 +94,13 @@ binary-arch: build install
 #	dh_installemacsen
 #	dh_installpam
 #	dh_installmime
-#	dh_python
+	dh_python
 #	dh_installinit
 #	dh_installcron
 #	dh_installinfo
-	dh_installman
-	dh_link
-	dh_strip
+# 	dh_installman
+# 	dh_link
+# 	dh_strip
 	dh_compress
 	dh_fixperms
 #	dh_perl

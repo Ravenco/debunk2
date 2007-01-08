@@ -2,11 +2,20 @@ Source: debunk2
 Section: unknown
 Priority: optional
 Maintainer: Håvard Dahle <havard@dahle.no>
-Build-Depends: debhelper (>= 5)
+Build-Depends: debhelper (>= 5), python (>= 2.4), python-dev, python-qt4, pyqt4-dev-tools
 Standards-Version: 3.7.2
 
 Package: debunk2
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-qt4
+Description: Read MS Outlook autocomplete (NK2) files and extract email addresses
+ Microsoft Outlook stores its autocomplete email info in an undocumented file format. This project tries to unlock the information therein.
+ .
+ Currently supported export formats:
+ .
+ * CSV/TSV - comma-, tab-, and other-separated lists
+ .
+ * Vcard - vcard virtual business cards (planned)
+ * SyncML - an xml dialect of vcard (planned)
+ .
+ Reqires python-qt4
