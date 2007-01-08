@@ -11,7 +11,7 @@
 
 
 # To create win32 bdist exe: python setup.py py2exe --includes sip
-# To create source: python setup.py 
+# To create source: python setup.py  --formats zip
 #
 #
 

@@ -5,7 +5,7 @@
 
 # Modified for python and the debunk2 project
 # Håvard Dahle <havard@dahle.no>
-# $Id
+# $Id$
 #
 
 # Uncomment this to turn on verbose mode.
@@ -67,10 +67,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/debunk2.
-# 	$(MAKE) install DESTDIR=$(CURDIR)/debian/debunk2
-	# Add here commands to install the arch part of the package into 
-	# debian/tmp.
-# 	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/tmp/usr
+
 	$(DH_PY_INTERPRETER) setup.py install --prefix=$(CURDIR)/debian/debunk2/usr
         
 	# Nuke *.pyc files that shouldn't be packaged

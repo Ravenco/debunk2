@@ -16,3 +16,8 @@
 
  * export VERSION=x.x
  * dch --newversion VERSION
+
+== PACKAGING ==
+
+ * python setup.py source --formats zip
+ * python setup.py py2exe --includes sip

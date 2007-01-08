@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Mon Jan  1 19:17:35 2007
+# Created: Mon Jan  8 21:56:44 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
