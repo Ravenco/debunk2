@@ -20,5 +20,6 @@
 
 == PACKAGING ==
 
- * python setup.py source --formats zip
+ * python setup.py sdist --formats zip
  * python setup.py py2exe --includes sip
+ * fakeroot debian/rules binary
