@@ -2,6 +2,11 @@
 ## $Id$
 ## (C) 2007 <havard@dahle.no>
 
+== UPGRADING THE CHANGELOG ==
+
+ * export VERSION=x.x
+ * dch --newversion $VERSION
+
 == BRANCHING ==
 
  * export VERSION=x.x
@@ -12,10 +17,6 @@
  * export VERSION=x.x
  * svn copy https://debunk2.googlecode.com/svn/trunk/ https://debunk2.googlecode.com/svn/tags/$VERSION -m "Tagging version $VERSION"
 
-== UPGRADING THE CHANGELOG ==
-
- * export VERSION=x.x
- * dch --newversion VERSION
 
 == PACKAGING ==
 
