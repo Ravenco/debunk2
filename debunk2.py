@@ -12,7 +12,7 @@
 __doc__ = """Export MS Outlook NK2 files into something readable by humans and machines (qt4 gui)
 """
 
-import sys, types, os.path, os, glob
+import sys, types, os.path, os, glob, quopri
 
 def printerror(errormsg):
     "Display an error message on the console and, if possible, on the gui"
@@ -71,6 +71,31 @@ WARNING=2
 ERROR=3
 QUESTION=4
 
+#def dragEnterEvent(self, e):
+    #print "enterevent"
+    #e.acceptProposedAction()
+    
+#def dropEvent(self, e):
+    #print "dropevent"
+    #e.accept()
+  
+#def dragMoveEvent(self, event):
+    #print "moveevent"
+    #raise 'hei'
+    #event.acceptProposedAction()
+
+def fileExt(format):
+    "Return file extension of supplied format"
+    if format in (CSV, TSV, SSV):
+        return "csv"
+    elif format in (SYNCML, ):
+        return "syncml"
+    elif format in (XML,):
+        return "xml"
+    elif format == VCARD:
+        return "vcf"
+
+
 class debunker(QtGui.QDialog):
     
     nk2 = None
@@ -89,6 +114,15 @@ class debunker(QtGui.QDialog):
         QtCore.QObject.connect(self.ui.export, QtCore.SIGNAL('clicked()'), self.exportNK2)
         QtCore.QObject.connect(self.ui.about, QtCore.SIGNAL('clicked()'), self.about)
 
+        ##self.ui.setAcceptDrops(True) # we want to be able to accept drag and drops
+        #self.ui.parsedTable.dragEnterEvent = dragEnterEvent
+        #self.ui.parsedTable.dropEvent = dropEvent
+        #self.ui.parsedTable.dragMoveEvent = dragMoveEvent
+        
+        #self.ui.nk2Location.dragEnterEvent = dragEnterEvent
+        #self.ui.nk2Location.dropEvent = dropEvent
+        #self.ui.nk2Location.dragMoveEvent = dragMoveEvent
+        
         locs = ['USERPROFILE', 'PWD', 'SYSTEMDRIVE']
         for v in locs:
             here = os.getenv(v)
@@ -147,7 +181,7 @@ class debunker(QtGui.QDialog):
                 format = c
                 break
         print "format: ", format
-        defaultpath = os.path.join(self.startuppath, 'outlook-export.csv')
+        defaultpath = os.path.join(self.startuppath, 'outlook-export.%s' % fileExt(format))
         exportfile = QtGui.QFileDialog.getSaveFileName(self, 
                                            "Select file name for export",
                                            defaultpath)
@@ -216,9 +250,9 @@ class debunker(QtGui.QDialog):
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
             name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            file.write("FN;CHARSET=UTF-8:%s\r\n" % name)
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
             address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
-            file.write("EMAIL;INTERNET;CHARSET=UTF-8:%s\r\n" % address)
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
