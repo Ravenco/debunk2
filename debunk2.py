@@ -101,6 +101,7 @@ class debunker(QtGui.QDialog):
     nk2 = None
     startuppath = ''
     pathlist = []
+    exportcharset = 'iso-8859-1' # we need to hold outlook in the hand. no utf8
     
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -224,8 +225,8 @@ class debunker(QtGui.QDialog):
         i = 0
         total = self.ui.parsedTable.rowCount()
         while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
@@ -249,10 +250,10 @@ class debunker(QtGui.QDialog):
         while i < total:
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.exportcharset, quopri.encodestring(name)))
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.exportcharset,  quopri.encodestring(address)))
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
