@@ -35,27 +35,21 @@ def printerror(errormsg):
             if s == 0: # dialog was shown, stop now
                 break
 try:
-    from PyQt4 import QtCore, QtGui, uic
+    from Tkinter import *
 except ImportError:
     #grr. pyqt4 is not (properly) installed
-    printerror("""You need pyqt4 to run this program
+    printerror("""You need Tkinyrt to run this program
 Try to run nk2parser.py directly for a non-gui version""")
     sys.exit(1)
 
 try:
-    import debunk2_ui, nk2parser
+    import nk2parser
 except ImportError:
     #grr. Something is severly wrong
     printerror("""Something is severely wrong. 
     
 Couldn't load the rest of the program. Seek help.""")
     raise #show the real error
-
-try:
-    from xml.etree import ElementTree # py2exe needs this import statement
-except ImportError:
-    #oh oh. we're fucked
-    print "You may have problems creating exe files. If you don't intend to do that, have a nice day"
 
 # constants
 CSV=1  # comma-separated
@@ -95,13 +89,151 @@ def fileExt(format):
     elif format == VCARD:
         return "vcf"
 
+class debunker:
 
-class debunker(QtGui.QDialog):
+    pathlist = []
+    startuppath = ''
+
+    def __init__(self, tkroot):
+        self.root = tkroot
+        self.pathlist = []
+        self.startuppath = os.getcwd()
+
+        #textbox
+        self.path = StringVar()
+        self.pathWidget = Entry(self.root, textvariable=self.path, width=60)
+        self.pathWidget.pack()
+
+        #displaybox
+        self.list = Listbox(self.root, selectmode=EXTENDED, width=60)
+        self.list.pack()
+
+        #createbutton
+        self.saveButton = Button(self.root, command=self.save, text='Save')
+        self.saveButton.pack()
+        
+        #make
+        self.start()
+
+    def start(self):
+        locs = ['USERPROFILE', 'SYSTEMDRIVE']
+        for v in []: #locs:
+            here = os.getenv(v)
+            if here is not None:
+                self.startuppath = here
+                self.pathlist.append(here)
+                break
+        #print self.startuppath
+        self.pathlist.append(self.startuppath)
+        self.displayPaths(self.findNK2())
+        self.loadNK2()
+        
+    def findNK2(self):
+        "Look in the default places for an NK2 file. Returns list of found files"
+        locations = [] #XXX: TODO: Find default locations on win32
+        for p in self.pathlist:
+            locations += glob.glob(p+"/*.NK2")
+            locations += glob.glob(p+"/*.nk2")
+        return locations
+    
+    def displayPaths(self, pathlist):
+        "Displays different paths in the combobox so the user can choose"
+        assert(type(pathlist) == types.ListType)
+        self.path.set(str(pathlist[0]))
+    
+    def loadNK2(self, item=0):
+        "Load an NK2 and display it"
+        #path = unicode(self.ui.nk2Location.currentText())
+        path = unicode(self.path.get())
+        print "path", path
+        assert(os.path.exists(path))
+        assert(os.path.isfile(path))
+        #del(self.nk2)
+        self.nk2 = nk2parser.nk2bib(path)  # init the parser
+        self.nk2.parse()                   # slurp the file
+        #self.nk2.check()
+        self.list.delete(0) # zap the existing table 
+        i  = 0
+        for rec in self.nk2.records:
+            self.list.insert(END,
+                             '%i %s' % (i, rec)
+                             )
+            i += 1
+        #self.ui.parsedTable.resizeColumnsToContents() # resize so it looks nice
+
+    def save(self):
+        f = open(os.path.join(self.startuppath, 'hei.txt'), 'wb')
+        return self.saveTable(f, VCARD)
+
+    def saveTable(self, fileobject, format=SSV):
+        if format in (CSV, TSV, SSV):
+            return self.saveTableCharacterSeparated(fileobject, format)
+        elif format in (SYNCML, XML):
+            return self.saveTableXml(fileobject, format)
+        elif format == VCARD:
+            return self.saveTableVCard(fileobject)
+        
+    def saveTableCharacterSeparated(self, file, format):
+        seps = { CSV:',',
+                 TSV:'\t',
+                 SSV:';' }
+        separator = seps[format]
+        print "charsep: --%s-- " % separator
+        #make sure the file is something we can write to
+        if type(file) != types.FileType:
+            #assert
+            file = open(file, 'wb')
+        assert(hasattr(file, 'write'))
+        
+        #loop thru the table
+        #we're using the table (and not self.nk2) since the user 
+        #may have made changes to the table data
+        i = 0
+        total = self.ui.parsedTable.rowCount()
+        while i < total:
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            file.write("'%s'%s%s\r\n" % (name, separator, address))
+            #print "wrote '%s'%s%s" % (name, separator, address)
+            i += 1
+        file.close()
+        
+    def saveTableXml(self, file, format=SYNCML):
+        print "saveTableXml"
+    
+    def saveTableVCard(self, file):
+        #http://www.imc.org/pdi/vcard-21.rtf
+        print "saveTableVCard"
+        if type(file) != types.FileType:
+            #assert
+            file = open(file, 'wb')
+        assert(hasattr(file, 'write'))
+        #loop thru the table
+        #we're using the table (and not self.nk2) since the user 
+        #may have made changes to the table data
+        i = 0
+        #total = self.ui.parsedTable.rowCount()
+        for rec in self.list.get(0, END):
+            file.write("BEGIN:VCARD\r\n") #Begin vcard
+            file.write("VERSION:2.1\r\n")
+            a = rec.split()
+            print a
+            name = a[1]
+            address = a[2]
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
+            
+            #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
+            file.write("END:VCARD\r\n\r\n") #end vcard
+            i += 1
+        file.close()
+        
+
+class debunkers:#QtGui.QDialog):
     
     nk2 = None
     startuppath = ''
     pathlist = []
-    exportcharset = 'iso-8859-1' # we need to hold outlook in the hand. no utf8
     
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -225,8 +357,8 @@ class debunker(QtGui.QDialog):
         i = 0
         total = self.ui.parsedTable.rowCount()
         while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
@@ -250,10 +382,10 @@ class debunker(QtGui.QDialog):
         while i < total:
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.exportcharset, quopri.encodestring(name)))
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.exportcharset,  quopri.encodestring(address)))
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
@@ -293,9 +425,14 @@ if __name__ == "__main__":
         print __doc__
         print 'Usage: %s [NK2 file] '% sys.argv[0]
         sys.exit()
-    else:
+    elif False:
         app = QtGui.QApplication(sys.argv)
         debunk2 = QtGui.QDialog()
         ui = debunker()
         ui.show()
         sys.exit(app.exec_())
+    else:
+        r = Tk()
+        app = debunker(r)
+        r.mainloop()
+        
