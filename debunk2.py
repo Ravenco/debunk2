@@ -1,4 +1,4 @@
-#!/usr/bin/python -d
+#!/usr/bin/python
 # -*- coding:utf8 -*-
 ###########################################################################
 #    Copyright (C) 2006-2007 - Håvard Dahle
