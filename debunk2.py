@@ -12,7 +12,7 @@
 __doc__ = """Export MS Outlook NK2 files into something readable by humans and machines (qt4 gui)
 """
 
-import sys, types, os.path, os, glob, quopri
+import sys, types, os.path, os, re, glob, quopri
 
 def printerror(errormsg):
     "Display an error message on the console and, if possible, on the gui"
@@ -36,6 +36,7 @@ def printerror(errormsg):
                 break
 try:
     from Tkinter import *
+    import tkMessageBox
 except ImportError:
     #grr. pyqt4 is not (properly) installed
     printerror("""You need Tkinyrt to run this program
@@ -93,24 +94,35 @@ class debunker:
 
     pathlist = []
     startuppath = ''
+    exportcharset = 'iso-8859-1' # hold outlook in the hand. no utf8
 
     def __init__(self, tkroot):
         self.root = tkroot
         self.pathlist = []
         self.startuppath = os.getcwd()
 
-        #textbox
+        #locatebutton
+        self.locateButton = Button(self.root, command=self.locate, text='Locate NK2')
+        self.locateButton.pack(anchor='ne')#, side='right')
+        
+        #pathbox
         self.path = StringVar()
         self.pathWidget = Entry(self.root, textvariable=self.path, width=60)
-        self.pathWidget.pack()
+        self.pathWidget.pack(anchor='nw')#side='left')
 
         #displaybox
-        self.list = Listbox(self.root, selectmode=EXTENDED, width=60)
-        self.list.pack()
+        self.list = Listbox(self.root, selectmode=EXTENDED, width=80)
+        self.list.pack(expand=True, fill='y')
 
         #createbutton
-        self.saveButton = Button(self.root, command=self.save, text='Save')
-        self.saveButton.pack()
+        self.saveButton = Button(self.root, command=self.save, text='Export')
+        self.saveButton.pack(side='right')
+        
+        #exportfile
+        self.exportPath = StringVar()
+        self.exportPathWidget = Entry(self.root, textvariable=self.exportPath, width=60)
+        self.exportPath.set(os.path.join(self.startuppath, 'outlook-export.%s' % fileExt(VCARD)))
+        self.exportPathWidget.pack()#side='left')
         
         #make
         self.start()
@@ -156,22 +168,36 @@ class debunker:
         i  = 0
         for rec in self.nk2.records:
             self.list.insert(END,
-                             '%i %s' % (i, rec)
+                             '%i %s' % (i, unicode(rec))
                              )
             i += 1
         #self.ui.parsedTable.resizeColumnsToContents() # resize so it looks nice
 
+    def locate(self):
+        print "locate"
+        
+
     def save(self):
-        f = open(os.path.join(self.startuppath, 'hei.txt'), 'wb')
+        f = open(self.exportPath.get(), 'wb')
         return self.saveTable(f, VCARD)
 
     def saveTable(self, fileobject, format=SSV):
         if format in (CSV, TSV, SSV):
-            return self.saveTableCharacterSeparated(fileobject, format)
+            r = self.saveTableCharacterSeparated(fileobject, format)
         elif format in (SYNCML, XML):
-            return self.saveTableXml(fileobject, format)
+            r = self.saveTableXml(fileobject, format)
         elif format == VCARD:
-            return self.saveTableVCard(fileobject)
+            r = self.saveTableVCard(fileobject)
+        if r:
+            tkMessageBox.showinfo(
+                "debunk2",
+                "Names and addresses have been written to %s" % self.exportPath.get()
+            )
+        else:
+            tkMessageBox.showerror(
+                "debunk2",
+                "Something went wrong. "
+            )
         
     def saveTableCharacterSeparated(self, file, format):
         seps = { CSV:',',
@@ -191,15 +217,17 @@ class debunker:
         i = 0
         total = self.ui.parsedTable.rowCount()
         while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
         file.close()
+        return True
         
     def saveTableXml(self, file, format=SYNCML):
         print "saveTableXml"
+        return False
     
     def saveTableVCard(self, file):
         #http://www.imc.org/pdi/vcard-21.rtf
@@ -216,20 +244,32 @@ class debunker:
         for rec in self.list.get(0, END):
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n")
-            a = rec.split()
+            #a = rec.split()
+            a = self.splitRow(rec)
             print a
             name = a[1]
             address = a[2]
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % \
+                (self.exportcharset, quopri.encodestring(name.encode(self.exportcharset))))
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" %\
+                (self.exportcharset, quopri.encodestring(address.encode(self.exportcharset)))) 
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
             i += 1
         file.close()
+        return True
         
+    def splitRow(self, s):
+        """Get a row: '1 "Contact Name" <contact@server.com>' and split the fields. Returns a tuple of three elements"""
+        assert(type(s) in (types.StringType, types.UnicodeType))
+        pat = re.compile('^(\d+)\s"([^"]+)"\s<([^>]+)>$')
+        try:
+            return pat.match(s.strip()).groups()
+        except AttributeError:
+            return None, None, None
 
-class debunkers:#QtGui.QDialog):
+class debunkerQT:#QtGui.QDialog):
     
     nk2 = None
     startuppath = ''
