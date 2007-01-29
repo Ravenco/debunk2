@@ -12,9 +12,9 @@
 __doc__ = """Parse MS Outlook NK2 files into something readable by humans and machines
 """
 
-__version__ = 0.4
+__version__ = 0.5
 
-import types, sys, os.path
+import types, sys, os.path, re
 
 NUL='\x00'
 
@@ -23,6 +23,11 @@ DEBUGLEVEL=0
 def isString(s):
     "True if it's a python or Unicode string"
     return type(s) in (types.StringType, types.UnicodeType)
+
+def isEmail(s):
+    "True if it looks like an email address"
+    assert(isString(s))
+    return re.compile(r'^[-_\+\.a-zA-Z0-9]+@[^\.]+\.[a-zA-Z]+').match(s) is not None
 
 class nk2bib:
     file = None
@@ -40,6 +45,7 @@ class nk2bib:
         f.close()
         
     def parse(self):
+        "The workhorse. Parse the file and chop it into managable records"
         sep1 = '\x04H\xfe\x13' # record separator
         sep2 = '\x00\xdd\x01\x0fT\x02\x00\x00\x01'  # record separator
         
@@ -67,26 +73,29 @@ class nk2bib:
                     dbg(y, 2)
                     continue # couldn't find any email address in this record
                 rec.setAddress(split1[2])
-                rec.setName(unicode(split1[0][1:], "latin1"))
+                rec.setName(unicode(split1[0][1:], "latin1")) # name fields are latin1 (iso-8859-1) encoded
                 self.addRecord(rec)
     
     def addRecord(self, rec):
         "Add an nk2 record to the internal list of records"
         assert(isinstance(rec, nk2addr))
-        #weed out name and email duplicates
+        #weed out exact name and email duplicates
         for r in self.records:
             if r.address == rec.address and r.name == rec.name: return
         self.records.append(rec)
     
     def prn(self):
+        "Print all records"
         for z in self.records: print z.__str__().encode('utf8')
 
     def findRecord(self, address):
+        "Find a record by its email address"
         for rec in self.records:
             if rec.address == address: return rec
         return False
 
     def csv(self):
+        "Print all records, semicolon separated"
         for z in self.records:
             if z.address:
                 print z.fieldSeparatedValues(u";")
@@ -94,8 +103,9 @@ class nk2bib:
 class nk2addr:
     
     name = u'' # pretty-printable name
-    charset = None # charset of name
+    charset = None # charset of fields
     address = u'' # email address
+    org = u'' # organization
     
     _type = None # SMTP or xxx
     domaincheck = False
@@ -131,25 +141,48 @@ class nk2addr:
         self._type = r[1]
         
     def setName(self, name):
+        "Set display name"
         assert(isString(name))
-        #name = name.strip()
-        self.name = self.strpApos(name)
+        #if the name looks like an email address, make it look like a name (ref. gmail)
+        # first.s.lastname@gmail.com -> First S. Lastname
+        name = self.strpApos(name).strip() # prune apostrphes
+        if isEmail(name):
+            nameparts = name[0:name.find('@')].split('.') #weed out everything after '@', and split by '.'
+            name = '' # start afresh
+            for z in nameparts: name += z[0].upper() + z[1:] + ' ' # prettyprint name
+    
+        self.name = name
     
     def setAddress(self, address):
+        "Set email address"
         assert(isString(address), "supplied argument is not a valid email address")
         a = u''
         for z in address:
             #dbg(ord(z), 1)
             if ord(z) < 20 or ord(z) > 128:
-                break
+                break # stop when the characters start to look like rubbish (unprintable)
             a += z
-        self.address = self.strpApos(a)
+        
+        addrs = self.strpApos(a) # remove any apostrophes
+        if addrs.startswith('mailto:'): # remove copy-paste blunders
+            try: addrs = addrs[7:]
+            except IndexError: pass #shite
+        
+        try:
+            assert(isEmail(addrs))   # make sure it looks allright
+        except AssertionError:
+            dbg(addrs)
+        self.address = addrs
+        domain = addrs[addrs.find('@')+1:]
+        self.org = domain[0:domain.rfind('.')] # add organization
+        dbg(self.org)
     
     def strp(self, s):
         "Return string stripped of NUL bytes and unprintable characters"
-        return s.replace(NUL, '')#.replace('\x00', '')
+        return s.replace(NUL, '')
 
     def strpApos(self, s):
+        """Return string stripped of apostrophes (" and ') if they're found on the first and last position of the string"""
         if len(s) == 0: 
             return None
         for apo in ('"', "'"):
@@ -170,12 +203,8 @@ class nk2addr:
             raise
     
     def __str__(self):
+        
         if self.address is None: return u''
-        #try:
-            #return u'"%s" <%s>' % (self.name, self.address) #'"%(name)s" <%(address)s>' % vars(self)
-        #except:
-            #print "KKA", type(self.address), repr(self.address)
-            #raise
         try:
             return u'"%(name)s" <%(address)s>' %  {'name':self.name, 'address':self.address} #vars(self)
         except: 
@@ -195,8 +224,3 @@ if __name__ == '__main__':
     nk2 = nk2bib(sys.argv[1])
     nk2.parse()
     nk2.prn()
-    #for z in nk2.walk():
-        #print repr(z)
-        ##print z
-        #print '++'
-        
