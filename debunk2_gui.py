@@ -37,6 +37,8 @@ def printerror(errormsg):
 try:
     from Tkinter import *
     import tkMessageBox
+    from PyQt4 import QtGui, QtCore
+    import debunk2_ui
 except ImportError:
     #grr. pyqt4 is not (properly) installed
     printerror("""You need Tkinyrt to run this program
@@ -269,7 +271,7 @@ class debunker:
         except AttributeError:
             return None, None, None
 
-class debunkerQT:#QtGui.QDialog):
+class debunkerQT(QtGui.QDialog):
     
     nk2 = None
     startuppath = ''
@@ -456,23 +458,11 @@ http://www.gnu.org/copyleft/gpl.html
 """ % (nk2parser.__version__) )
         return ret
 
-if __name__ == "__main__":
 
-    DEBUGLEVEL = sys.argv.count('-d')
-    nk2parser.DEBUGLEVEL = DEBUGLEVEL
+def main(args):
+    app = QtGui.QApplication(args)
+    debunk2 = QtGui.QDialog()
+    ui = debunkerQT()
+    ui.show()
+    sys.exit(app.exec_())
 
-    if "-h" in sys.argv[1:]:
-        print __doc__
-        print 'Usage: %s [NK2 file] '% sys.argv[0]
-        sys.exit()
-    elif False:
-        app = QtGui.QApplication(sys.argv)
-        debunk2 = QtGui.QDialog()
-        ui = debunker()
-        ui.show()
-        sys.exit(app.exec_())
-    else:
-        r = Tk()
-        app = debunker(r)
-        r.mainloop()
-        
