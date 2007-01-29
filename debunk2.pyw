@@ -6,7 +6,7 @@
 #
 #    Lisence: GPL2
 #
-# $Id: debunk2.py 82 2007-01-23 18:37:59Z havard.dahle $
+# $Id$
 ###########################################################################
 
 __doc__ = """Export MS Outlook NK2 files into something readable by humans and machines (qt4 gui)
