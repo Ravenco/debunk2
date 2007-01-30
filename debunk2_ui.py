@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Tue Jan  9 01:07:29 2007
+# Created: Tue Jan 30 01:26:08 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ class Ui_debunk2(object):
         debunk2.setSizeGripEnabled(False)
 
         self.layoutWidget = QtGui.QWidget(debunk2)
-        self.layoutWidget.setGeometry(QtCore.QRect(11,10,707,439))
+        self.layoutWidget.setGeometry(QtCore.QRect(3,9,714,439))
         self.layoutWidget.setObjectName("layoutWidget")
 
         self.gridlayout = QtGui.QGridLayout(self.layoutWidget)
@@ -43,14 +43,6 @@ class Ui_debunk2(object):
         self.about.setAutoRaise(True)
         self.about.setObjectName("about")
         self.gridlayout.addWidget(self.about,0,4,1,1)
-
-        self.parsedTable = QtGui.QTableWidget(self.layoutWidget)
-        self.parsedTable.setMinimumSize(QtCore.QSize(600,400))
-        self.parsedTable.setAcceptDrops(True)
-        self.parsedTable.setDragEnabled(True)
-        self.parsedTable.setAlternatingRowColors(True)
-        self.parsedTable.setObjectName("parsedTable")
-        self.gridlayout.addWidget(self.parsedTable,1,0,2,3)
 
         spacerItem = QtGui.QSpacerItem(20,201,QtGui.QSizePolicy.Minimum,QtGui.QSizePolicy.Expanding)
         self.gridlayout.addItem(spacerItem,2,3,1,2)
@@ -95,6 +87,14 @@ class Ui_debunk2(object):
         spacerItem1 = QtGui.QSpacerItem(271,27,QtGui.QSizePolicy.Expanding,QtGui.QSizePolicy.Minimum)
         self.gridlayout.addItem(spacerItem1,0,3,1,1)
 
+        self.parsedTable = QtGui.QTableWidget(self.layoutWidget)
+        self.parsedTable.setMinimumSize(QtCore.QSize(600,400))
+        self.parsedTable.setAcceptDrops(True)
+        self.parsedTable.setDragEnabled(True)
+        self.parsedTable.setAlternatingRowColors(True)
+        self.parsedTable.setObjectName("parsedTable")
+        self.gridlayout.addWidget(self.parsedTable,1,0,2,2)
+
         self.retranslateUi(debunk2)
         QtCore.QMetaObject.connectSlotsByName(debunk2)
         debunk2.setTabOrder(self.nk2Location,self.nk2Locator)
@@ -106,8 +106,18 @@ class Ui_debunk2(object):
         self.nk2Location.addItem(QtGui.QApplication.translate("debunk2", "Trying to find autocompletion (NK2) files...", None, QtGui.QApplication.UnicodeUTF8))
         self.about.setToolTip(QtGui.QApplication.translate("debunk2", "About this program...", None, QtGui.QApplication.UnicodeUTF8))
         self.about.setText(QtGui.QApplication.translate("debunk2", "About...", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioTSV.setToolTip(QtGui.QApplication.translate("debunk2", "Tab-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioTSV.setText(QtGui.QApplication.translate("debunk2", "TSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSSV.setToolTip(QtGui.QApplication.translate("debunk2", "Semicolon-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSSV.setText(QtGui.QApplication.translate("debunk2", "SSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioCSV.setToolTip(QtGui.QApplication.translate("debunk2", "Comma-separated values", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioCSV.setText(QtGui.QApplication.translate("debunk2", "CSV", None, QtGui.QApplication.UnicodeUTF8))
+        self.export.setText(QtGui.QApplication.translate("debunk2", "E&xport...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("debunk2", "Export to file:", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "VCard", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSyncML.setText(QtGui.QApplication.translate("debunk2", "SyncML", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.clear()
-        self.parsedTable.setColumnCount(2)
+        self.parsedTable.setColumnCount(3)
         self.parsedTable.setRowCount(1)
 
         headerItem = QtGui.QTableWidgetItem()
@@ -121,16 +131,10 @@ class Ui_debunk2(object):
         headerItem2 = QtGui.QTableWidgetItem()
         headerItem2.setText(QtGui.QApplication.translate("debunk2", "Address", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.setHorizontalHeaderItem(1,headerItem2)
-        self.radioTSV.setToolTip(QtGui.QApplication.translate("debunk2", "Tab-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioTSV.setText(QtGui.QApplication.translate("debunk2", "TSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSSV.setToolTip(QtGui.QApplication.translate("debunk2", "Semicolon-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSSV.setText(QtGui.QApplication.translate("debunk2", "SSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioCSV.setToolTip(QtGui.QApplication.translate("debunk2", "Comma-separated values", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioCSV.setText(QtGui.QApplication.translate("debunk2", "CSV", None, QtGui.QApplication.UnicodeUTF8))
-        self.export.setText(QtGui.QApplication.translate("debunk2", "E&xport...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("debunk2", "Export to file:", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "VCard", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioSyncML.setText(QtGui.QApplication.translate("debunk2", "SyncML", None, QtGui.QApplication.UnicodeUTF8))
+
+        headerItem3 = QtGui.QTableWidgetItem()
+        headerItem3.setText(QtGui.QApplication.translate("debunk2", "Organization", None, QtGui.QApplication.UnicodeUTF8))
+        self.parsedTable.setHorizontalHeaderItem(2,headerItem3)
 
 
 if __name__ == "__main__":
