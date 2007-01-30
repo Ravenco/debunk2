@@ -102,7 +102,7 @@ class debunkerQT(QtGui.QDialog):
     nk2 = None
     startuppath = ''
     pathlist = []
-    encoding = 'iso-8859-1' # hold outlook in the hand. no utf8
+    charset = 'iso-8859-1' # hold outlook in the hand. no utf8
     
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -234,8 +234,8 @@ class debunkerQT(QtGui.QDialog):
         i = 0
         total = self.ui.parsedTable.rowCount()
         while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.encoding)
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.encoding)
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.charset)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.charset)
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
@@ -259,12 +259,12 @@ class debunkerQT(QtGui.QDialog):
         while i < total:
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.encoding)
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(name)))
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.encoding)
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(address)))
-            org = unicode(self.ui.parsedTable.item(i, 2).text()).encode(self.encoding)
-            file.write("ORGANIZATION;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(org)))
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.charset)
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.charset, quopri.encodestring(name)))
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.charset)
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.charset, quopri.encodestring(address)))
+            org = unicode(self.ui.parsedTable.item(i, 2).text()).encode(self.charset)
+            file.write("ORGANIZATION;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.charset, quopri.encodestring(org)))
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
