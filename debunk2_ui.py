@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Tue Jan 30 01:26:08 2007
+# Created: Tue Jan 30 01:35:00 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -114,7 +114,9 @@ class Ui_debunk2(object):
         self.radioCSV.setText(QtGui.QApplication.translate("debunk2", "CSV", None, QtGui.QApplication.UnicodeUTF8))
         self.export.setText(QtGui.QApplication.translate("debunk2", "E&xport...", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("debunk2", "Export to file:", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "VCard", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioVCard.setToolTip(QtGui.QApplication.translate("debunk2", "Electronic business card (.vcf)", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioVCard.setText(QtGui.QApplication.translate("debunk2", "vCard", None, QtGui.QApplication.UnicodeUTF8))
+        self.radioSyncML.setToolTip(QtGui.QApplication.translate("debunk2", "xml format suited for mobile phones", None, QtGui.QApplication.UnicodeUTF8))
         self.radioSyncML.setText(QtGui.QApplication.translate("debunk2", "SyncML", None, QtGui.QApplication.UnicodeUTF8))
         self.parsedTable.clear()
         self.parsedTable.setColumnCount(3)
