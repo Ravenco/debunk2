@@ -1,4 +1,5 @@
-debunk2.py
+debunk2_gui.py
+debunk2.pyw
 nk2parser.py
 setup.py
 debunk2.ui
