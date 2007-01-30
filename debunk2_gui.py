@@ -158,7 +158,7 @@ class debunkerQT(QtGui.QDialog):
     def loadNK2(self, item=0):
         "Load an NK2 and display it"
         path = unicode(self.ui.nk2Location.currentText())
-        print "path", path
+        #print "path", path
         assert(os.path.exists(path))
         assert(os.path.isfile(path))
         #del(self.nk2)
