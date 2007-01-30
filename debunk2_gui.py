@@ -14,6 +14,13 @@ __doc__ = """Export MS Outlook NK2 files into something readable by humans and m
 
 import sys, types, os.path, os, re, glob, quopri
 
+TKMSGBOX=False
+try:
+    import tkMessageBox
+    TKMSGBOX=True
+except ImportError:
+    pass
+
 def printerror(errormsg):
     "Display an error message on the console and, if possible, on the gui"
     print errormsg
@@ -35,8 +42,6 @@ def printerror(errormsg):
             if s == 0: # dialog was shown, stop now
                 break
 try:
-    from Tkinter import *
-    import tkMessageBox
     from PyQt4 import QtGui, QtCore
     import debunk2_ui
 except ImportError:
@@ -92,190 +97,12 @@ def fileExt(format):
     elif format == VCARD:
         return "vcf"
 
-class debunker:
-
-    pathlist = []
-    startuppath = ''
-    exportcharset = 'iso-8859-1' # hold outlook in the hand. no utf8
-
-    def __init__(self, tkroot):
-        self.root = tkroot
-        self.pathlist = []
-        self.startuppath = os.getcwd()
-
-        #locatebutton
-        self.locateButton = Button(self.root, command=self.locate, text='Locate NK2')
-        self.locateButton.pack(anchor='ne')#, side='right')
-        
-        #pathbox
-        self.path = StringVar()
-        self.pathWidget = Entry(self.root, textvariable=self.path, width=60)
-        self.pathWidget.pack(anchor='nw')#side='left')
-
-        #displaybox
-        self.list = Listbox(self.root, selectmode=EXTENDED, width=80)
-        self.list.pack(expand=True, fill='y')
-
-        #createbutton
-        self.saveButton = Button(self.root, command=self.save, text='Export')
-        self.saveButton.pack(side='right')
-        
-        #exportfile
-        self.exportPath = StringVar()
-        self.exportPathWidget = Entry(self.root, textvariable=self.exportPath, width=60)
-        self.exportPath.set(os.path.join(self.startuppath, 'outlook-export.%s' % fileExt(VCARD)))
-        self.exportPathWidget.pack()#side='left')
-        
-        #make
-        self.start()
-
-    def start(self):
-        locs = ['USERPROFILE', 'SYSTEMDRIVE']
-        for v in []: #locs:
-            here = os.getenv(v)
-            if here is not None:
-                self.startuppath = here
-                self.pathlist.append(here)
-                break
-        #print self.startuppath
-        self.pathlist.append(self.startuppath)
-        self.displayPaths(self.findNK2())
-        self.loadNK2()
-        
-    def findNK2(self):
-        "Look in the default places for an NK2 file. Returns list of found files"
-        locations = [] #XXX: TODO: Find default locations on win32
-        for p in self.pathlist:
-            locations += glob.glob(p+"/*.NK2")
-            locations += glob.glob(p+"/*.nk2")
-        return locations
-    
-    def displayPaths(self, pathlist):
-        "Displays different paths in the combobox so the user can choose"
-        assert(type(pathlist) == types.ListType)
-        self.path.set(str(pathlist[0]))
-    
-    def loadNK2(self, item=0):
-        "Load an NK2 and display it"
-        #path = unicode(self.ui.nk2Location.currentText())
-        path = unicode(self.path.get())
-        print "path", path
-        assert(os.path.exists(path))
-        assert(os.path.isfile(path))
-        #del(self.nk2)
-        self.nk2 = nk2parser.nk2bib(path)  # init the parser
-        self.nk2.parse()                   # slurp the file
-        #self.nk2.check()
-        self.list.delete(0) # zap the existing table 
-        i  = 0
-        for rec in self.nk2.records:
-            self.list.insert(END,
-                             '%i %s' % (i, unicode(rec))
-                             )
-            i += 1
-        #self.ui.parsedTable.resizeColumnsToContents() # resize so it looks nice
-
-    def locate(self):
-        print "locate"
-        
-
-    def save(self):
-        f = open(self.exportPath.get(), 'wb')
-        return self.saveTable(f, VCARD)
-
-    def saveTable(self, fileobject, format=SSV):
-        if format in (CSV, TSV, SSV):
-            r = self.saveTableCharacterSeparated(fileobject, format)
-        elif format in (SYNCML, XML):
-            r = self.saveTableXml(fileobject, format)
-        elif format == VCARD:
-            r = self.saveTableVCard(fileobject)
-        if r:
-            tkMessageBox.showinfo(
-                "debunk2",
-                "Names and addresses have been written to %s" % self.exportPath.get()
-            )
-        else:
-            tkMessageBox.showerror(
-                "debunk2",
-                "Something went wrong. "
-            )
-        
-    def saveTableCharacterSeparated(self, file, format):
-        seps = { CSV:',',
-                 TSV:'\t',
-                 SSV:';' }
-        separator = seps[format]
-        print "charsep: --%s-- " % separator
-        #make sure the file is something we can write to
-        if type(file) != types.FileType:
-            #assert
-            file = open(file, 'wb')
-        assert(hasattr(file, 'write'))
-        
-        #loop thru the table
-        #we're using the table (and not self.nk2) since the user 
-        #may have made changes to the table data
-        i = 0
-        total = self.ui.parsedTable.rowCount()
-        while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.exportcharset)
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.exportcharset)
-            file.write("'%s'%s%s\r\n" % (name, separator, address))
-            #print "wrote '%s'%s%s" % (name, separator, address)
-            i += 1
-        file.close()
-        return True
-        
-    def saveTableXml(self, file, format=SYNCML):
-        print "saveTableXml"
-        return False
-    
-    def saveTableVCard(self, file):
-        #http://www.imc.org/pdi/vcard-21.rtf
-        print "saveTableVCard"
-        if type(file) != types.FileType:
-            #assert
-            file = open(file, 'wb')
-        assert(hasattr(file, 'write'))
-        #loop thru the table
-        #we're using the table (and not self.nk2) since the user 
-        #may have made changes to the table data
-        i = 0
-        #total = self.ui.parsedTable.rowCount()
-        for rec in self.list.get(0, END):
-            file.write("BEGIN:VCARD\r\n") #Begin vcard
-            file.write("VERSION:2.1\r\n")
-            #a = rec.split()
-            a = self.splitRow(rec)
-            print a
-            name = a[1]
-            address = a[2]
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % \
-                (self.exportcharset, quopri.encodestring(name.encode(self.exportcharset))))
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" %\
-                (self.exportcharset, quopri.encodestring(address.encode(self.exportcharset)))) 
-            
-            #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
-            file.write("END:VCARD\r\n\r\n") #end vcard
-            i += 1
-        file.close()
-        return True
-        
-    def splitRow(self, s):
-        """Get a row: '1 "Contact Name" <contact@server.com>' and split the fields. Returns a tuple of three elements"""
-        assert(type(s) in (types.StringType, types.UnicodeType))
-        pat = re.compile('^(\d+)\s"([^"]+)"\s<([^>]+)>$')
-        try:
-            return pat.match(s.strip()).groups()
-        except AttributeError:
-            return None, None, None
-
 class debunkerQT(QtGui.QDialog):
     
     nk2 = None
     startuppath = ''
     pathlist = []
+    encoding = 'iso-8859-1' # hold outlook in the hand. no utf8
     
     def __init__(self):
         QtGui.QDialog.__init__(self)
@@ -298,7 +125,8 @@ class debunkerQT(QtGui.QDialog):
         #self.ui.nk2Location.dropEvent = dropEvent
         #self.ui.nk2Location.dragMoveEvent = dragMoveEvent
         
-        locs = ['USERPROFILE', 'PWD', 'SYSTEMDRIVE']
+        # find startuppath (or something like it)
+        locs = ['PWD', 'USERPROFILE', 'SYSTEMDRIVE']
         for v in locs:
             here = os.getenv(v)
             if here is not None:
@@ -310,11 +138,15 @@ class debunkerQT(QtGui.QDialog):
         
     def findNK2(self):
         "Look in the default places for an NK2 file. Returns list of found files"
-        locations = [] #XXX: TODO: Find default locations on win32
+        locations = []
+        # find default locations of nk2 file
+        for l in map(os.getenv, ['APPDATA']):
+            if l is not None: self.pathlist += os.path.join(l, 'Microsoft', 'Outlook')
+        # find any *.NK2 files in pathlist
         for p in self.pathlist:
             locations += glob.glob(p+"/*.NK2")
             locations += glob.glob(p+"/*.nk2")
-        return locations
+        return locations # return a list of nk2 files
     
     def displayPaths(self, pathlist):
         "Displays different paths in the combobox so the user can choose"
@@ -336,11 +168,14 @@ class debunkerQT(QtGui.QDialog):
         self.ui.parsedTable.clear() # zap the existing table 
         self.ui.parsedTable.setHorizontalHeaderItem(0, QtGui.QTableWidgetItem('Name'))
         self.ui.parsedTable.setHorizontalHeaderItem(1, QtGui.QTableWidgetItem('Address'))
+        self.ui.parsedTable.setHorizontalHeaderItem(2, QtGui.QTableWidgetItem('Organization'))
         self.ui.parsedTable.setRowCount(len(self.nk2.records)) # expand table to keep all records
         i  = 0
         for rec in self.nk2.records:
             self.ui.parsedTable.setItem(i, 0, QtGui.QTableWidgetItem(rec.name))
             self.ui.parsedTable.setItem(i, 1, QtGui.QTableWidgetItem(rec.address))
+            org = rec.org[0].upper() + rec.org[1:]
+            self.ui.parsedTable.setItem(i, 2, QtGui.QTableWidgetItem(org))
             i += 1
         self.ui.parsedTable.resizeColumnsToContents() # resize so it looks nice
         
@@ -399,8 +234,8 @@ class debunkerQT(QtGui.QDialog):
         i = 0
         total = self.ui.parsedTable.rowCount()
         while i < total:
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.encoding)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.encoding)
             file.write("'%s'%s%s\r\n" % (name, separator, address))
             #print "wrote '%s'%s%s" % (name, separator, address)
             i += 1
@@ -424,10 +259,12 @@ class debunkerQT(QtGui.QDialog):
         while i < total:
             file.write("BEGIN:VCARD\r\n") #Begin vcard
             file.write("VERSION:2.1\r\n") 
-            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode('utf8')
-            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(name))
-            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode('utf8')
-            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:%s\r\n" % quopri.encodestring(address))
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.encoding)
+            file.write("FN;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(name)))
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.encoding)
+            file.write("EMAIL;INTERNET;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(address)))
+            org = unicode(self.ui.parsedTable.item(i, 2).text()).encode(self.encoding)
+            file.write("ORGANIZATION;ENCODING=QUOTED-PRINTABLE;CHARSET=%s:%s\r\n" % (self.encoding, quopri.encodestring(org)))
             
             #file.write("KEY;TYPE=X509:%s\r\n" x509) #not supported yet
             file.write("END:VCARD\r\n\r\n") #end vcard
