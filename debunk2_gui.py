@@ -140,12 +140,12 @@ class debunkerQT(QtGui.QDialog):
         "Look in the default places for an NK2 file. Returns list of found files"
         locations = []
         # find default locations of nk2 file
-        for l in map(os.getenv, ['APPDATA']):
-            if l is not None: self.pathlist += os.path.join(l, 'Microsoft', 'Outlook')
-        # find any *.NK2 files in pathlist
-        for p in self.pathlist:
-            locations += glob.glob(p+"/*.NK2")
-            locations += glob.glob(p+"/*.nk2")
+        appdata = os.getenv('APPDATA')
+        if appdata is not None:
+            self.pathlist += os.path.join(appdata, 'Roaming', 'Microsoft', 'Outlook') # vista file location
+            self.pathlist += os.path.join(appdata, 'Microsoft', 'Outlook') # winxp, win2003 file location
+        for p in self.pathlist: # look for .NK2 files in all paths, adding as we find
+            locations += glob.glob(os.path.join(p, "*.NK2")) # glob is case INsensitive
         return locations # return a list of nk2 files
     
     def displayPaths(self, pathlist):
