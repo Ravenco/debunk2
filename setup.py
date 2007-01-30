@@ -10,7 +10,7 @@
 ###########################################################################
 
 
-# To create win32 bdist exe: python setup.py py2exe --includes sip
+# To create win32 bdist exe: python -OO setup.py py2exe --includes sip --excludes=Tkconstants,Tkinter,tcl,matplotlib,ssl,socket,bz2,unicodedata,email,curses,EasyDialogs,pyreadlinepython 
 # To create source: python setup.py  --formats zip
 #
 #
