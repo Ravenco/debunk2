@@ -35,7 +35,7 @@ class nk2bib:
     records = []
     
     def __init__(self, file):
-        dbg(file)
+        dbg('opening file: '+file, 2)
         assert(isString(file))
         assert(os.path.exists(file))
         self.file = file
@@ -175,7 +175,7 @@ class nk2addr:
         self.address = addrs
         domain = addrs[addrs.find('@')+1:]
         self.org = domain[0:domain.rfind('.')] # add organization
-        dbg(self.org)
+        dbg('organization: ' + self.org, 2)
     
     def strp(self, s):
         "Return string stripped of NUL bytes and unprintable characters"
