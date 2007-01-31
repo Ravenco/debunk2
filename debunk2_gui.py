@@ -142,9 +142,9 @@ class debunkerQT(QtGui.QDialog):
         # find default locations of nk2 file
         appdata = os.getenv('APPDATA')
         if appdata is not None:
-            self.pathlist += os.path.join(appdata, 'Roaming', 'Microsoft', 'Outlook') # vista file location 1
-            self.pathlist += os.path.join(appdata, 'Local', 'Microsoft', 'Outlook') # vista file location 2
-            self.pathlist += os.path.join(appdata, 'Microsoft', 'Outlook') # winxp, win2003 file location
+            self.pathlist += [os.path.join(appdata, 'Roaming', 'Microsoft', 'Outlook'), # vista file location 1
+                              os.path.join(appdata, 'Local', 'Microsoft', 'Outlook'), # vista file location 2
+                              os.path.join(appdata, 'Microsoft', 'Outlook')] # winxp, win2003 file location
         for p in self.pathlist: # look for .NK2 files in all paths, adding as we find
             locations += glob.glob(os.path.join(p, "*.NK2")) # glob is case INsensitive
         return locations # return a list of nk2 files
