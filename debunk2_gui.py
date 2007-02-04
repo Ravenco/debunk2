@@ -196,8 +196,9 @@ class debunkerQT(QtGui.QDialog):
         exportfile = QtGui.QFileDialog.getSaveFileName(self, 
                                            "Select file name for export",
                                            defaultpath)
-                                           
-        ret = self.saveTable(exportfile, format)
+        # make sure we got a valid file
+        if not unicode(exportfile): return # cancelled
+        ret = self.saveTable(unicode(exportfile), format)
         self.info('Names and email addresses were written successfully to %s' % exportfile)
     
     def addNK2(self):
