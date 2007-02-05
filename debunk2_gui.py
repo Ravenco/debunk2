@@ -14,13 +14,6 @@ __doc__ = """Export MS Outlook NK2 files into something readable by humans and m
 
 import sys, types, os.path, os, re, glob, quopri
 
-TKMSGBOX=False
-try:
-    import tkMessageBox
-    TKMSGBOX=True
-except ImportError:
-    pass
-
 def printerror(errormsg):
     "Display an error message on the console and, if possible, on the gui"
     print errormsg
@@ -46,7 +39,7 @@ try:
     import debunk2_ui
 except ImportError:
     #grr. pyqt4 is not (properly) installed
-    printerror("""You need Tkinyrt to run this program
+    printerror("""You need PyQt4 to run this program
 Try to run nk2parser.py directly for a non-gui version""")
     sys.exit(1)
 
