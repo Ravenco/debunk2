@@ -1,3 +1,14 @@
+debunk2 (0.5) unstable; urgency=low
+
+  * Fix: automatically find and load NK2 files (Vista ready)
+  * Feature: generate pretty names from email addresses
+  * Feature: pull organization out from email addresses
+  * Fix: display About... button properly
+  * Fix: output encoding is now iso-8859-1 and not utf8
+  * New: startup script makes for easier win32 packaging
+
+ -- Håvard Dahle <havard@dahle.no>  Mon,  5 Feb 2007 01:50:52 +0100
+
 debunk2 (0.4) unstable; urgency=low
 
   * New feature: export to VCard.  
