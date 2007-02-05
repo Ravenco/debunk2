@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'debunk2.ui'
 #
-# Created: Tue Jan 30 01:42:05 2007
+# Created: Mon Feb  5 01:48:24 2007
 #      by: PyQt4 UI code generator 4.0.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -40,6 +40,7 @@ class Ui_debunk2(object):
 
         self.about = QtGui.QToolButton(self.layoutWidget)
         self.about.setIcon(QtGui.QIcon("../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png"))
+        self.about.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
         self.about.setAutoRaise(True)
         self.about.setObjectName("about")
         self.gridlayout.addWidget(self.about,0,4,1,1)
@@ -105,7 +106,7 @@ class Ui_debunk2(object):
         self.nk2Locator.setText(QtGui.QApplication.translate("debunk2", "&Locate NK2...", None, QtGui.QApplication.UnicodeUTF8))
         self.nk2Location.addItem(QtGui.QApplication.translate("debunk2", "Trying to find autocompletion (NK2) files...", None, QtGui.QApplication.UnicodeUTF8))
         self.about.setToolTip(QtGui.QApplication.translate("debunk2", "About this program...", None, QtGui.QApplication.UnicodeUTF8))
-        self.about.setText(QtGui.QApplication.translate("debunk2", "About...", None, QtGui.QApplication.UnicodeUTF8))
+        self.about.setText(QtGui.QApplication.translate("debunk2", "?", None, QtGui.QApplication.UnicodeUTF8))
         self.radioTSV.setToolTip(QtGui.QApplication.translate("debunk2", "Tab-separated values", None, QtGui.QApplication.UnicodeUTF8))
         self.radioTSV.setText(QtGui.QApplication.translate("debunk2", "TSV", None, QtGui.QApplication.UnicodeUTF8))
         self.radioSSV.setToolTip(QtGui.QApplication.translate("debunk2", "Semicolon-separated values", None, QtGui.QApplication.UnicodeUTF8))

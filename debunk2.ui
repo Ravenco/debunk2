@@ -71,10 +71,13 @@
        <string>About this program...</string>
       </property>
       <property name="text" >
-       <string>About...</string>
+       <string>?</string>
       </property>
       <property name="icon" >
        <iconset>../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png</iconset>
+      </property>
+      <property name="toolButtonStyle" >
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
       </property>
       <property name="autoRaise" >
        <bool>true</bool>
