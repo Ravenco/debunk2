@@ -24,6 +24,9 @@
  * svn checkout https://debunk2.googlecode.com/svn/tags/$VERSION /tmp/$VERSION
  * cd /tmp/$VERSION
  * python setup.py sdist --formats zip
- * python -OO setup.py py2exe --includes sip --excludes=Tkconstants,Tkinter,tcl,matplotlib,ssl,socket,bz2,unicodedata,email,curses,EasyDialogs,pyreadline
+  - advzip -r -4 dist/debunk2-$VERSION.zip # recompress
  * fakeroot debian/rules binary
-
+ --  WIN32:
+ * python -OO setup.py py2exe --includes sip --excludes=Tkconstants,Tkinter,tcl,matplotlib,ssl,socket,bz2,unicodedata,email,curses,EasyDialogs,pyreadline
+ * python -OO debunk2_gui.py debunk2_ui.py nk2parser.py && zip win/library.zip debunk2_gui.pyc debunk2_ui.pyc nk2parser.pyc && advzip -z -4 win/library.zip
+ * makensis -DVERSION_MAJOR=$VERMAJ -DVERSION_MINOR=$VERMIN webinstaller.nsi
