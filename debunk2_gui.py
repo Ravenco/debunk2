@@ -146,7 +146,7 @@ class debunkerQT(QtGui.QDialog):
                               os.path.join(appdata, 'Local', 'Microsoft', 'Outlook'), # vista file location 2
                               os.path.join(appdata, 'Microsoft', 'Outlook')] # winxp, win2003 file location
         for p in self.pathlist: # look for .NK2 files in all paths, adding as we find
-            locations += glob.glob(os.path.join(p, "*.NK2")) # glob is case INsensitive
+            locations += glob.glob(os.path.join(p, "*.[nN][kK]2")) # case INsensitive globbing for files
         return locations # return a list of nk2 files
     
     def displayPaths(self, pathlist):
