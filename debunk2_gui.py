@@ -4,7 +4,7 @@
 #    Copyright (C) 2006-2007 - Håvard Dahle
 #    <havard@dahle.no>
 #
-#    Lisence: GPL2
+#    License: GPL2
 #
 # $Id$
 ###########################################################################
@@ -36,7 +36,6 @@ def printerror(errormsg):
                 break
 try:
     from PyQt4 import QtGui, QtCore
-    import debunk2_ui
 except ImportError:
     #grr. pyqt4 is not (properly) installed
     printerror("""You need PyQt4 to run this program
@@ -44,7 +43,7 @@ Try to run nk2parser.py directly for a non-gui version""")
     sys.exit(1)
 
 try:
-    import nk2parser
+    import nk2parser, debunk2_ui
 except ImportError:
     #grr. Something is severly wrong
     printerror("""Something is severely wrong. 

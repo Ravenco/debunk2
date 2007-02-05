@@ -4,7 +4,7 @@
 #    Copyright (C) 2007 - Håvard Dahle 
 #    <havard@dahle.no>
 #
-#    Lisens: GPL2
+#    License: GPL2
 #
 # $Id$
 ###########################################################################
