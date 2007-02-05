@@ -1,6 +1,7 @@
 # webinstaller.nsi
 # installer for debunk2 -- ripped off the ffmpeg installer
 # havard@dahle.no (C) 2007 -- GPLv2
+# $Id$
 # 
 # much gore extracted from the pluginImportersExporters.nsi script of the AbiWord project. 
 # 
@@ -45,7 +46,7 @@ XPStyle On
 OutFile ".\dist\debunk2_${VERSION_MAJOR}.${VERSION_MINOR}_webinstall.exe"
 
 ; License Information
-LicenseText "This program is Licensed under the GNU General Public License (GPL).\r\nYou must agree to this license before you are permitted to use it." "$(^NextBtn)"
+LicenseText "This program is Licensed under the GNU General Public License (GPL). You must agree to this license before you are permitted to use it." "$(^NextBtn)"
 LicenseData "LICENSE.txt"
 
 ; the default installation directory
@@ -58,7 +59,7 @@ InstallDirRegKey HKLM SOFTWARE\debuNK2\v${VERSION_MAJOR} "Install_Dir"
 ComponentText "This will install debuNK2 on your computer."
 
 ;The text to prompt the user to enter a directory
-;DirText "Please select the folder where you want to install debuNK2. If you're upgrading, choose the folder of the previous installation."
+DirText "Please select the folder where you want to install debuNK2. If you're upgrading, choose the folder of the previous installation."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;MACROS;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -110,28 +111,28 @@ ComponentText "This will install debuNK2 on your computer."
 !define unzipFile "!insertmacro unzipFileMacro"
 
 ; USAGE:
-;${unzipFile} "$TEMP\libxml2-2.6.19-runtime.zip" "$INSTDIR\AbiWord" "bin\libxml2.dll" "ERROR: failed to extract libxml2.dll from libxml2-2.6.19-runtime.zip"
+;${unzipFile} "$TEMP\libxml2-2.6.19-runtime.zip" "$INSTDIR\AbiWord" "ERROR: failed to extract libxml2.dll from libxml2-2.6.19-runtime.zip"
 ;        StrCmp $0 "success" 0 doCleanup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;LET'S START THE PARTY;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 #Page custom customPage
-Page components
+;Page components
 Page license
 Page directory 
 Page instfiles
 
 Section "Required libraries"
         ; Testing clause to see if important dlls exist
-        IfFileExists "$INSTDIR\debuNK2\python25.dll" DontInstall 0
+        IfFileExists "$INSTDIR\python25.dll" DontInstall 0
         
         ; slurp the dlls
         ${dlFile} "${RUNTIME_URL}" "$TEMP\debuNK2-runtime.zip" "ERROR: Dependency download failed.  Please make sure you are connected to the Internet, then click Retry.  File: ${RUNTIME_URL}"
         StrCmp $0 "success" 0 doCleanup
         
         ; explode the dlls
-        ${unzipFile} "$TEMP\debuNK2-runtime.zip" "$INSTDIR\debuNK2" "" "ERROR: failed to extract debuNK2-runtime.zip"
+        ${unzipFile} "$TEMP\debuNK2-runtime.zip" "$INSTDIR" "ERROR: failed to extract debuNK2-runtime.zip"
         StrCmp $0 "success" 0 doCleanup
         
         
@@ -149,6 +150,10 @@ Section "Install"
   SetCompress Auto
   SetOverwrite IfNewer
   File ".\win\debunk2.exe"
+  ;
+  ; REMEMBER TO BYTE COMPILE THE SCRIPTS AND PUT THE .pyc FILES IN library.zip AT EVERY UPDATE
+  ;
+  File ".\win\library.zip"
   File ".\debunk2.pyw"
   File ".\debunk2_gui.py"
   File ".\debunk2_ui.py"
