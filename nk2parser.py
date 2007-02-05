@@ -26,8 +26,20 @@ def isString(s):
 
 def isEmail(s):
     "True if it looks like an email address"
+    #http://www.faqs.org/rfcs/rfc2822.html
+    ##atext           =       ALPHA / DIGIT / ; Any character except controls,
+                        ##"!" / "#" /     ;  SP, and specials.
+                        ##"$" / "%" /     ;  Used for atoms
+                        ##"&" / "'" /
+                        ##"*" / "+" /
+                        ##"-" / "/" /
+                        ##"=" / "?" /
+                        ##"^" / "_" /
+                        ##"`" / "{" /
+                        ##"|" / "}" /
+                        ##"~"
     assert(isString(s))
-    return re.compile(r'^[-_\+\.a-zA-Z0-9]+@[^\.]+\.[a-zA-Z]+').match(s) is not None
+    return re.compile(r'^[-_=\!\#\$\*\/\?\^\~\+\.a-zA-Z0-9]+@[^\.]+\.[a-zA-Z]+').match(s) is not None
 
 class nk2bib:
     file = None
@@ -174,7 +186,7 @@ class nk2addr:
             dbg(addrs)
         self.address = addrs
         domain = addrs[addrs.find('@')+1:]
-        self.org = domain[0:domain.rfind('.')] # add organization
+        self.org = domain[0:domain.rfind('.')] # add organization (everything except the top level domain)
         dbg('organization: ' + self.org, 2)
     
     def strp(self, s):
@@ -182,7 +194,7 @@ class nk2addr:
         return s.replace(NUL, '')
 
     def strpApos(self, s):
-        """Return string stripped of apostrophes (" and ') if they're found on the first and last position of the string"""
+        """Return string stripped of apostrophes (" and ') if they're found on both the first and last position of the string"""
         if len(s) == 0: 
             return None
         for apo in ('"', "'"):
