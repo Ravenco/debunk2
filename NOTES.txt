@@ -6,6 +6,7 @@
 
  * export VERSION=x.x
  * dch --newversion $VERSION
+ * svn commit debian/changelog -m "Adding ChangeLog info for version $VERSION"
 
 == BRANCHING ==
 
@@ -20,6 +21,9 @@
 
 == PACKAGING ==
 
+ * svn checkout https://debunk2.googlecode.com/svn/tags/$VERSION /tmp/$VERSION
+ * cd /tmp/$VERSION
  * python setup.py sdist --formats zip
  * python -OO setup.py py2exe --includes sip --excludes=Tkconstants,Tkinter,tcl,matplotlib,ssl,socket,bz2,unicodedata,email,curses,EasyDialogs,pyreadline
  * fakeroot debian/rules binary
+
