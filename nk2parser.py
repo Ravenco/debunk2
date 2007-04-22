@@ -155,9 +155,12 @@ class nk2addr:
     def setName(self, name):
         "Set display name"
         assert(isString(name))
+        name = self.strpApos(name).strip() # prune apostrphes
+        #strip stuff that got in there by mistake
+        if name.startswith('mailto:'):
+            name = name[7:]
         #if the name looks like an email address, make it look like a name (ref. gmail)
         # first.s.lastname@gmail.com -> First S. Lastname
-        name = self.strpApos(name).strip() # prune apostrphes
         if isEmail(name):
             nameparts = name[0:name.find('@')].split('.') #weed out everything after '@', and split by '.'
             name = '' # start afresh
