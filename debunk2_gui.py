@@ -43,7 +43,7 @@ Try to run nk2parser.py directly for a non-gui version""")
     sys.exit(1)
 
 try:
-    import nk2parser, debunk2_ui
+    import nk2parser, debunk2_ui, debunk2_ui_resources
 except ImportError:
     #grr. Something is severly wrong
     printerror("""Something is severely wrong. 
@@ -107,6 +107,11 @@ class debunkerQT(QtGui.QDialog):
         QtCore.QObject.connect(self.ui.nk2Locator, QtCore.SIGNAL('clicked()'), self.addNK2)
         QtCore.QObject.connect(self.ui.export, QtCore.SIGNAL('clicked()'), self.exportNK2)
         QtCore.QObject.connect(self.ui.about, QtCore.SIGNAL('clicked()'), self.about)
+        QtCore.QObject.connect(self.ui.exporthelp, QtCore.SIGNAL('clicked()'), self.exportFormatHelp)
+        
+        #icons
+        self.ui.exporthelp.setIcon(QtGui.QIcon(":/info"))
+        self.ui.about.setIcon(QtGui.QIcon(":/blocks"))
 
         ##self.ui.setAcceptDrops(True) # we want to be able to accept drag and drops
         #self.ui.parsedTable.dragEnterEvent = dragEnterEvent
@@ -174,7 +179,7 @@ class debunkerQT(QtGui.QDialog):
         
     def exportNK2(self):
         format = None
-        controls = { CSV: self.ui.radioCSV,
+        controls = { #CSV: self.ui.radioCSV,  ## comma is not suited as a separator
                      TSV: self.ui.radioTSV,
                      SSV: self.ui.radioSSV,
                      SYNCML : self.ui.radioSyncML,
@@ -270,6 +275,7 @@ class debunkerQT(QtGui.QDialog):
         ret = QtGui.QMessageBox.information(self, 'debuNK2 information', text)
         return ret
 
+
     def about(self):
         "Display about this program message"
         ret = QtGui.QMessageBox.information(self, 'About debuNK2 %s' % nk2parser.__version__,
@@ -284,9 +290,27 @@ The autocomplete (NK2) files store the name and email address (and more) of ever
 
 As far as the author is aware, it does not loose data, but in certain cases (especially where non-English characters are involved) records may be skipped. Sorry. Sacrifice a chicken, then send me the file and I will fix it.
 
-The program and source code are fully available to anyone at any time, under the terms of the GPLv2 license.
+The program and source code of all elements in this program are fully available to anyone at any time, under the terms of the GPLv2 license.
 http://www.gnu.org/copyleft/gpl.html
+
+This program distributes binary versions of Python2.5, Qt 4.1 Open Source Edition and PyQt, all governed by the same license as debuNK2. Links to source code for all projects are available at http://code.google.com/p/debunk2/
 """ % (nk2parser.__version__) )
+        return ret
+
+    def exportFormatHelp(self):
+        "Display export format help"
+        ret = QtGui.QMessageBox.information(self, 'debuNK2 export help',
+u"""Choosing the right export format
+
+All depending on what program you intend to peruse the contact info extracted from the NK2 file, different export formats are best suited.
+
+OUTLOOK
+If you intend to re-import the records to MS Outlook, your best shot is to ???
+# HELP NEEDED #
+
+OTHER CLIENTS
+Most other email clients should be able to import vCard files, which is less error-prone than the tab/semicolon-separated exports. In case they do not, experience suggests that semicolon is the best separator, but if your records contain semicolons, things may go awry in a flash.
+""")
         return ret
 
 
