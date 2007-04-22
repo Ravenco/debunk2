@@ -4,6 +4,8 @@ nk2parser.py
 setup.py
 debunk2.ui
 debunk2_ui.py
+debunk2_ui_resources.py
+gui-resources.qrc
 vars.bat
 Command Prompt.lnk
 LICENSE.txt
