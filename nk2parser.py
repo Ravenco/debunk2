@@ -12,7 +12,7 @@
 __doc__ = """Parse MS Outlook NK2 files into something readable by humans and machines
 """
 
-__version__ = 0.5
+__version__ = 0.6
 
 import types, sys, os.path, re
 
