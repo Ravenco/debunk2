@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+   <qresource>
+       <file alias="blocks">../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png</file>
+       <file alias="info">../../../../usr/share/icons/crystalsvg/16x16/actions/info.png</file>
+   </qresource>
+</RCC>
