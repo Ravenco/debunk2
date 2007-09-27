@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>817</width>
-    <height>473</height>
+    <width>936</width>
+    <height>543</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,120 +16,6 @@
    <bool>false</bool>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <item row="1" column="4" >
-    <widget class="QPushButton" name="exporthelp" >
-     <property name="cursor" >
-      <cursor>13</cursor>
-     </property>
-     <property name="contextMenuPolicy" >
-      <enum>Qt::NoContextMenu</enum>
-     </property>
-     <property name="toolTip" >
-      <string>Soothing help text for confused users</string>
-     </property>
-     <property name="icon" >
-      <iconset>../../../../usr/share/icons/crystalsvg/16x16/actions/info.png</iconset>
-     </property>
-     <property name="autoDefault" >
-      <bool>false</bool>
-     </property>
-     <property name="flat" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3" colspan="2" >
-    <widget class="QRadioButton" name="radioTSV" >
-     <property name="toolTip" >
-      <string>Tab-separated values</string>
-     </property>
-     <property name="text" >
-      <string>TSV</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3" colspan="2" >
-    <widget class="QRadioButton" name="radioSSV" >
-     <property name="toolTip" >
-      <string>Semicolon-separated values</string>
-     </property>
-     <property name="text" >
-      <string>SSV</string>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3" colspan="2" >
-    <widget class="QRadioButton" name="radioSyncML" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="toolTip" >
-      <string>xml format suited for mobile phones</string>
-     </property>
-     <property name="text" >
-      <string>SyncML</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="3" colspan="2" >
-    <widget class="QRadioButton" name="radioVCard" >
-     <property name="toolTip" >
-      <string>Electronic business card (.vcf)</string>
-     </property>
-     <property name="text" >
-      <string>vCard</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3" colspan="2" >
-    <widget class="QPushButton" name="export" >
-     <property name="text" >
-      <string>E&amp;xport...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>201</width>
-       <height>31</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="3" colspan="2" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>105</width>
-       <height>161</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QPushButton" name="nk2Locator" >
-     <property name="text" >
-      <string>&amp;Locate NK2...</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" >
     <widget class="QComboBox" name="nk2Location" >
      <property name="minimumSize" >
@@ -157,16 +43,19 @@
      </item>
     </widget>
    </item>
-   <item rowspan="8" row="1" column="0" colspan="3" >
+   <item row="0" column="1" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QPushButton" name="nk2Locator" >
+       <property name="text" >
+        <string>&amp;Locate NK2...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item rowspan="4" row="1" column="0" >
     <widget class="QTableWidget" name="parsedTable" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>1</hsizetype>
-       <vsizetype>7</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="acceptDrops" >
       <bool>true</bool>
      </property>
@@ -198,47 +87,144 @@
      </column>
     </widget>
    </item>
-   <item row="8" column="3" >
+   <item row="1" column="1" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Times New Roman'; font-size:12pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:14pt; font-weight:600;">Export:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exporthelp" >
+       <property name="contextMenuPolicy" >
+        <enum>Qt::NoContextMenu</enum>
+       </property>
+       <property name="toolTip" >
+        <string>Soothing help text for confused users</string>
+       </property>
+       <property name="icon" >
+        <iconset>../../../../usr/share/icons/crystalsvg/16x16/actions/info.png</iconset>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+       <property name="flat" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1" >
+    <layout class="QVBoxLayout" >
+     <item>
+      <widget class="QRadioButton" name="radioTSV" >
+       <property name="toolTip" >
+        <string>Tab-separated values</string>
+       </property>
+       <property name="text" >
+        <string>TSV</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioSSV" >
+       <property name="toolTip" >
+        <string>Semicolon-separated values</string>
+       </property>
+       <property name="text" >
+        <string>SSV</string>
+       </property>
+       <property name="checked" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioVCard" >
+       <property name="toolTip" >
+        <string>Electronic business card (.vcf)</string>
+       </property>
+       <property name="text" >
+        <string>vCard</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioXCard" >
+       <property name="toolTip" >
+        <string>Electronic business card, formatted with xml </string>
+       </property>
+       <property name="text" >
+        <string>xCard</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="export" >
+       <property name="text" >
+        <string>E&amp;xport...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="1" >
     <spacer>
      <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>81</width>
-       <height>20</height>
+       <width>109</width>
+       <height>201</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="8" column="4" >
-    <widget class="QToolButton" name="about" >
-     <property name="cursor" >
-      <cursor>13</cursor>
-     </property>
-     <property name="toolTip" >
-      <string>About this program...</string>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-     <property name="icon" >
-      <iconset>../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png</iconset>
-     </property>
-     <property name="toolButtonStyle" >
-      <enum>Qt::ToolButtonTextBesideIcon</enum>
-     </property>
-     <property name="autoRaise" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>Export:</string>
-     </property>
-    </widget>
+   <item row="4" column="1" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Minimum</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>81</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QToolButton" name="about" >
+       <property name="toolTip" >
+        <string>About this program...</string>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset>../../../../usr/share/icons/crystalsvg/16x16/devices/blockdevice.png</iconset>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -251,7 +237,6 @@
   <tabstop>about</tabstop>
   <tabstop>radioTSV</tabstop>
   <tabstop>radioSSV</tabstop>
-  <tabstop>radioSyncML</tabstop>
   <tabstop>radioVCard</tabstop>
   <tabstop>export</tabstop>
  </tabstops>

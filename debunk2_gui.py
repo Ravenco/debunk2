@@ -57,7 +57,7 @@ TSV=2  # tab-separated
 SSV=3  # semicolon-separated
 XML=4  # 
 VCARD=5  # vcard spec
-SYNCML=6  # syncml
+XCARD=6  # XCARD, jabber variant http://www.xmpp.org/extensions/xep-0054.html
 ODT=7  # OpenSpreadsheet 
 
 INFO=1
@@ -82,8 +82,8 @@ def fileExt(format):
     "Return file extension of supplied format"
     if format in (CSV, TSV, SSV):
         return "csv"
-    elif format in (SYNCML, ):
-        return "syncml"
+    elif format in (XCARD, ):
+        return "xcard"
     elif format in (XML,):
         return "xml"
     elif format == VCARD:
@@ -131,7 +131,10 @@ class debunkerQT(QtGui.QDialog):
                 self.pathlist.append(here)
                 break
         #print self.startuppath
-        self.displayPaths(self.findNK2())
+        try:
+            self.displayPaths(self.findNK2())
+        except AssertionError:
+            self.alert("The path list is nothing I can make sense of. What did you do?")
         
     def findNK2(self):
         "Look in the default places for an NK2 file. Returns list of found files"
@@ -182,7 +185,7 @@ class debunkerQT(QtGui.QDialog):
         controls = { #CSV: self.ui.radioCSV,  ## comma is not suited as a separator
                      TSV: self.ui.radioTSV,
                      SSV: self.ui.radioSSV,
-                     SYNCML : self.ui.radioSyncML,
+                     XCARD : self.ui.radioXCard,
                      VCARD : self.ui.radioVCard }
         for c in controls.keys():
             if controls[c].isChecked(): 
@@ -210,7 +213,7 @@ class debunkerQT(QtGui.QDialog):
     def saveTable(self, fileobject, format=SSV):
         if format in (CSV, TSV, SSV):
             return self.saveTableCharacterSeparated(fileobject, format)
-        elif format in (SYNCML, XML):
+        elif format in (XCARD, XML):
             return self.saveTableXml(fileobject, format)
         elif format == VCARD:
             return self.saveTableVCard(fileobject)
@@ -240,9 +243,36 @@ class debunkerQT(QtGui.QDialog):
             i += 1
         file.close()
         
-    def saveTableXml(self, file, format=SYNCML):
+    def saveTableXml(self, file, format=XCARD):
         print "saveTableXml"
-    
+        #make sure the file is something we can write to
+        if type(file) != types.FileType:
+            #assert
+            file = open(file, 'wb')
+        assert(hasattr(file, 'write'))
+        file.write('<?xml encoding="%s"?>\r\n' % self.charset)
+        file.write('<!-- vCard in XML: http://www.xmpp.org/extensions/xep-0054.html -->\r\n')
+        file.write('<xCard>\r\n')
+        #loop thru the table
+        #we're using the table (and not self.nk2) since the user 
+        #may have made changes to the table data
+        i = 0
+        total = self.ui.parsedTable.rowCount()
+        while i < total:
+            file.write('  <vCard><VERSION>2.0</VERSION>\r\n')
+            name = unicode(self.ui.parsedTable.item(i, 0).text()).encode(self.charset)
+            file.write('    <FN>%s</FN>\r\n' % name)
+            address = unicode(self.ui.parsedTable.item(i, 1).text()).encode(self.charset)
+            file.write('    <EMAIL><INTERNET/><USERID>%s</USERID></EMAIL>\r\n' % address)
+            org = unicode(self.ui.parsedTable.item(i, 2).text()).encode(self.charset)
+            file.write('    <ORG><ORGNAME>%s</ORGNAME><ORGUNIT/></ORG>\r\n' % org)
+            #file.write("<KEY><TYPE>x509</TYPE><CRED>%s</CRED></KEY>\r\n" % x509) #not supported yet
+            
+            file.write('  </vCard>\r\n')
+            i += 1
+        file.write('</xCard>\r\n')
+        file.close()
+        
     def saveTableVCard(self, file):
         #http://www.imc.org/pdi/vcard-21.rtf
         print "saveTableVCard"
@@ -283,7 +313,7 @@ u"""DebuNK2 version %s
 
 DebuNK2 is a program to extract useful information from the autocomplete files of MS Outlook.
 
-Copyright (C) 2007 Håvard Dahle <havard@dahle.no>
+Copyright (C) 2007 Håvard Gulldahl <havard@gulldahl.no>
 http://code.google.com/p/debunk2/
 
 The autocomplete (NK2) files store the name and email address (and more) of every outgoing e-mail sent in MS Outlook. This list of contacts is valuable data, but putting it to use is difficult since the file format is undocumented. By some tweaking, this program is able to read the name and addresses of ordinary email (SMTP) addressees.
@@ -305,11 +335,14 @@ u"""Choosing the right export format
 All depending on what program you intend to peruse the contact info extracted from the NK2 file, different export formats are best suited.
 
 OUTLOOK
-If you intend to re-import the records to MS Outlook, your best shot is to ???
-# HELP NEEDED #
+If you intend to re-import the records to MS Outlook, your best shot is to 
+1) Export as comma-separated values, import into MS Excel, and then import to MS Outlook
+2) Export as vCard, import into Windows Address book, and then import to MS Outlook
+
+# If you know of a better method, I'd love to hear from you! #
 
 OTHER CLIENTS
-Most other email clients should be able to import vCard files, which is less error-prone than the tab/semicolon-separated exports. In case they do not, experience suggests that semicolon is the best separator, but if your records contain semicolons, things may go awry in a flash.
+Most other email clients should be able to import vCard files, which is less error-prone than the tab/semicolon-separated exports. In case they do not, experience suggests that semicolon is the best separator -- unless your records contain semicolons, of course.
 """)
         return ret
 
